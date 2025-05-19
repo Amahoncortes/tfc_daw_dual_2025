@@ -180,6 +180,11 @@ devops-hub/
    npm init -y
    ```
 
+    Para ejecutar el proyecto
+   ```bash
+   npm run dev
+   ```
+
 2. Instalación de dependencias:
    ```bash
    npm install express

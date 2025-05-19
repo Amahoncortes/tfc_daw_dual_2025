@@ -1,4 +1,5 @@
 const usersRoute = require('./src/routes/users');
+const loginRoute = require('./src/auth/login');
 const initDB = require('./src/db/init');
 const express = require("express");
 const livereload = require('livereload');
@@ -31,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Middleware para procesar ruta de usuarios
 app.use('/users', usersRoute);
+//Middleware para procesar la ruta de autenticado
+app.use('/auth', loginRoute);
 
 app.get("/", (req, res) => {
   res.send(`<form method="POST" action="/">
