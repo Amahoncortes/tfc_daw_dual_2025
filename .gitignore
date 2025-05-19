@@ -1,0 +1,2 @@
+# Ignorar base de datos local
+src/db/database.sqlite
