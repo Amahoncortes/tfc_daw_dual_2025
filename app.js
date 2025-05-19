@@ -2,6 +2,7 @@ const usersRoute = require('./src/routes/users');
 const loginRoute = require('./src/auth/login');
 const initDB = require('./src/db/init');
 const express = require("express");
+const session = require('express-session');
 const livereload = require('livereload');
 const connectLivereload = require('connect-livereload');
 const path = require('path');
@@ -24,14 +25,24 @@ liveReloadServer.server.once("connection", () => {
   }, 100);
 });
 
+// Añadir para prevenir que la request venga nula
+app.use(express.json());
 
 // Middleware para procesar datos del formulario
 app.use(express.urlencoded({ extended: true }));
 
-// Añadir para prevenir que la request venga nula
-app.use(express.json());
+//Middleware para procesar el manejo de sesiones
+app.use(session({
+  secret: 'secreto-devops-hub', // Cambiar esto por una clave secreta más segura en producción
+  resave: false, // No volver a guardar la sesión si no ha habido cambios
+  saveUninitialized: true, // Guardar sesiones no inicializadas
+  cookie: { secure: false }, // Cambiar a true al usar HTTPS
+  maxAge: 1000 * 60 * 60 * 24 // 1 día de duración de la sesión
+}));
+
 // Middleware para procesar ruta de usuarios
 app.use('/users', usersRoute);
+
 //Middleware para procesar la ruta de autenticado
 app.use('/auth', loginRoute);
 
