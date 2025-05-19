@@ -1,0 +1,41 @@
+# Crear carpeta raíz
+New-Item -ItemType Directory -Path "devops-hub" | Out-Null
+
+# Cambiar al directorio raíz del proyecto
+Set-Location "devops-hub"
+
+# Crear subcarpetas
+$folders = @(
+    "node_modules",
+    "public/css",
+    "public/js",
+    "public/img",
+    "src/config",
+    "src/controllers",
+    "src/models",
+    "src/routes",
+    "src/middleware",
+    "src/utils",
+    "src/db",
+    "views"
+)
+
+foreach ($folder in $folders) {
+    New-Item -ItemType Directory -Path $folder -Force | Out-Null
+}
+
+# Crear archivos vacíos
+$files = @(
+    ".env",
+    ".gitignore",
+    "app.js",
+    "package.json",
+    "README.md"
+)
+
+foreach ($file in $files) {
+    New-Item -ItemType File -Path $file -Force | Out-Null
+}
+
+# Mensaje final
+Write-Host "✔ Proyecto devops-hub creado correctamente en $(Get-Location)" -ForegroundColor Green
