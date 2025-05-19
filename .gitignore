@@ -1,2 +1,64 @@
-# Ignorar base de datos local
-src/db/database.sqlite
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.sqlite-journal
+
+# Entorno
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+log.txt
+debug.log
+
+# Visual Studio Code
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.temp
+~$*
+*.swp
+
+# Build y cache
+dist/
+build/
+.cache/
+
+# Archivos del navegador
+*.localstorage
+*.cache
+*.session
+
+# Archivos de documentación generados
+*.docx
+*.odt#
+*.~lock.*
+*.pdf
+
+# GitHub Actions (ignorar si se generan tokens temporales o archivos confidenciales)
+.github/*-secrets*
+
+# DB Browser for SQLite
+*.sql (si generas scripts de dump temporales)
+
+# Otros editores
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
