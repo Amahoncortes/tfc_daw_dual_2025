@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/database");
 const bcrypt = require("bcrypt");
+const { preventLoginifAuthenticated } = require("../middleware/auth");
+const { isAuthenticated } = require("../middleware/auth");
 
 // POST /auth/login - Iniciar sesión
-router.post("/login", (req, res) => {
+router.post("/login", preventLoginifAuthenticated, (req, res) => {
   const { username, password } = req.body;
   //Verificar que se envíen el nombre de usuario y la contraseña
   if (!username || !password) {
@@ -33,7 +35,8 @@ router.post("/login", (req, res) => {
         req.session.username = user.username;
         req.session.isLoggedIn = true;
         res.json({
-          message: "Login successful",
+          message: "Login successful for the user " + user.username,
+          isLoggedIn: req.session.isLoggedIn,
           userId: user.id,
           username: user.username,
         });
@@ -51,31 +54,42 @@ router.post("/login", (req, res) => {
 });
 
 // GET /auth/logout - Cerrar sesión
-router.get("/logout", (req, res) => {
-  //Eliminar los datos de usuario de la sesión
-  req.session.destroy((err) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ error: "Error logging out", details: err.message });
-    }
-    res.json({ message: "Logout successful" });
-  });
+router.get("/logout", isAuthenticated, (req, res) => {
+
+  //Verificar si el usuario está autenticado
+  if (req.session && req.session.username) {
+    const username = req.session.username;
+    //Si lo está, eliminar los datos de usuario de la sesión
+    req.session.destroy((err) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({
+            error: "Error logging out for the user " + req.session.username,
+            details: err.message,
+          });
+      }
+      res.json({ message: `Logout successful for the user ${username}` });
+    });
+  } else {
+    return res.status(401).json({ error: "No user session found" });
+  }
 });
 
 // GET /auth/status - Verificar el estado de la sesión
-router.get("/status", (req, res) => {
+router.get("/status", isAuthenticated, (req, res) => {
   if (req.session.isLoggedIn) {
     res.json({
       isLoggedIn: true,
-      message: "User authenticated",
+      message: "User " + req.session.username + " authenticated",
       userId: req.session.userId,
       username: req.session.username,
     });
   } else {
     res.status(401).json({
       isLoggedIn: false,
-      message: "User is not logged in"
+      message:
+        "User " + (req.session.username || "unknown") + " is not logged in",
     });
   }
 });
