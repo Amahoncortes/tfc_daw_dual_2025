@@ -34,7 +34,7 @@ router.post("/login", preventLoginifAuthenticated, (req, res) => {
         req.session.userId = user.id;
         req.session.username = user.username;
         req.session.isLoggedIn = true;
-        res.redirect('/views/welcome.html');
+        res.redirect("/views/welcome.html");
       } else {
         return res.status(401).json({ error: "Invalid password" });
       }
@@ -50,19 +50,16 @@ router.post("/login", preventLoginifAuthenticated, (req, res) => {
 
 // GET /auth/logout - Cerrar sesión
 router.get("/logout", isAuthenticated, (req, res) => {
-
   //Verificar si el usuario está autenticado
   if (req.session && req.session.username) {
     const username = req.session.username;
     //Si lo está, eliminar los datos de usuario de la sesión
     req.session.destroy((err) => {
       if (err) {
-        return res
-          .status(500)
-          .json({
-            error: "Error logging out for the user " + req.session.username,
-            details: err.message,
-          });
+        return res.status(500).json({
+          error: "Error logging out for the user " + req.session.username,
+          details: err.message,
+        });
       }
       res.redirect("/");
     });
@@ -85,6 +82,22 @@ router.get("/status", isAuthenticated, (req, res) => {
       isLoggedIn: false,
       message:
         "User " + (req.session.username || "unknown") + " is not logged in",
+    });
+  }
+});
+
+router.get("/whoami", (req, res) => {
+  if (req.session && req.session.isLoggedIn) {
+    res.json({
+      username: req.session.username,
+      userId: req.session.userId,
+      isLoggedIn: true,
+    });
+  } else {
+    res.json({
+      username: null,
+      userId: null,
+      isLoggedIn: false,
     });
   }
 });
