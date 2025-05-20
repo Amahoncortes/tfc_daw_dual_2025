@@ -34,12 +34,7 @@ router.post("/login", preventLoginifAuthenticated, (req, res) => {
         req.session.userId = user.id;
         req.session.username = user.username;
         req.session.isLoggedIn = true;
-        res.json({
-          message: "Login successful for the user " + user.username,
-          isLoggedIn: req.session.isLoggedIn,
-          userId: user.id,
-          username: user.username,
-        });
+        res.redirect('/views/welcome.html');
       } else {
         return res.status(401).json({ error: "Invalid password" });
       }
@@ -69,7 +64,7 @@ router.get("/logout", isAuthenticated, (req, res) => {
             details: err.message,
           });
       }
-      res.json({ message: `Logout successful for the user ${username}` });
+      res.redirect("/");
     });
   } else {
     return res.status(401).json({ error: "No user session found" });
