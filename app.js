@@ -1,5 +1,5 @@
 const usersRoute = require('./src/routes/users');
-const loginRoute = require('./src/auth/auth');
+const loginRoute = require('./src/auth/login');
 const initDB = require('./src/db/init');
 const express = require("express");
 const session = require('express-session');

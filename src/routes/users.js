@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/database");
 const bcrypt = require("bcrypt");
+const { isAuthenticated } = require("../middleware/auth");
+const { canDeleteUser } = require("../middleware/users");
 
 //Endpoint para crear un nuevo usuario con cifrado de contraseña
 router.post("/", async (req, res) => {
@@ -11,7 +13,6 @@ router.post("/", async (req, res) => {
   }
 
   try {
-
     //Cifrar contraseña con bcrypt (10 rondas de encriptado)
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -21,7 +22,7 @@ router.post("/", async (req, res) => {
       if (err) {
         return res
           .status(500)
-          .json({ error: "Error inserting the user", details: err.message });
+          .json({ error: "Error inserting the user. It has already been created", details: err.message });
       }
       res
         .status(201)
@@ -44,6 +45,39 @@ router.get("/", (req, res) => {
         .json({ error: "Error fetching users", details: err.message });
     }
     res.status(200).json(rows);
+  });
+});
+
+//Endpoint para eliminar un usuario
+router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
+  const userId = req.params.id;
+
+  //Verificar que el ID del usuario sea un número válido
+  if (!userId || isNaN(userId)) {
+    return res.status(400).json({ error: "Invalid user ID." });
+  }
+
+  //Verificar que el usuario existe ante de eliminarlo
+  db.get("SELECT * FROM users WHERE id = ?", [userId], (err, user) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Error fetching user", details: err.message });
+    }
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    //Eliminar el usuario
+    db.run("DELETE FROM users WHERE id = ?", [userId], function (err) {
+      if (err) {
+        return res
+          .status(500)
+          .json({ error: "Error deleting user", details: err.message });
+      }
+      res.status(200).json({ message: "User deleted successfully", userId: userId });
+    });
   });
 });
 
