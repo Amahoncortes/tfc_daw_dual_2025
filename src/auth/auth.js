@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ error: "Se requieren usuario y contraseña" });
+    return res.status(400).json({ error: "Username & password required." });
   }
 
   //Buscar el usuario en la base de datos
@@ -16,12 +16,12 @@ router.post("/login", (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error al buscar el usuario", details: err.message });
+        .json({ error: "Error fetching user", details: err.message });
     }
 
     //Verificar si el usuario existe
     if (!user) {
-      return res.status(401).json({ error: "El usuario no existe" });
+      return res.status(401).json({ error: "User not found" });
     }
 
     //Verificar la contraseña
@@ -33,16 +33,16 @@ router.post("/login", (req, res) => {
         req.session.username = user.username;
         req.session.isLoggedIn = true;
         res.json({
-          message: "Login exitoso",
+          message: "Login successful",
           userId: user.id,
           username: user.username,
         });
       } else {
-        return res.status(401).json({ error: "Contraseña inválida" });
+        return res.status(401).json({ error: "Invalid password" });
       }
     } catch (error) {
       return res.status(500).json({
-        error: "Error al verificar la contraseña",
+        error: "Error verifying password",
         details: error.message,
       });
     }
@@ -56,9 +56,9 @@ router.post("/logout", (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error al cerrar sesión", details: err.message });
+        .json({ error: "Error logging out", details: err.message });
     }
-    res.json({ message: "Sesión cerrada con éxito" });
+    res.json({ message: "Logout successful" });
   });
 });
 
