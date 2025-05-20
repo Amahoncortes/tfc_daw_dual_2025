@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Middleware para procesar el manejo de sesiones
 app.use(session({
-  store: new SQLiteStore({ //almacena las sesiones en una base de datos SQLite
+  store: new SQLiteStore({
     db: 'sessions.sqlite',
     dir: path.join(__dirname, 'src', 'db'),
   }),
