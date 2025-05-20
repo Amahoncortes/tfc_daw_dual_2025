@@ -3,6 +3,7 @@ const loginRoute = require('./src/auth/auth');
 const initDB = require('./src/db/init');
 const express = require("express");
 const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 const livereload = require('livereload');
 const connectLivereload = require('connect-livereload');
 const path = require('path');
@@ -33,7 +34,11 @@ app.use(express.urlencoded({ extended: true }));
 
 //Middleware para procesar el manejo de sesiones
 app.use(session({
-  secret: 'secreto-devops-hub', // Cambiar esto por una clave secreta más segura en producción
+  store: new SQLiteStore({
+    db: 'sessions.sqlite',
+    dir: path.join(__dirname, 'src', 'db'),
+  }),
+  secret: 'devops_hub_secret_key', // Cambiar esto por una clave secreta más segura en producción
   resave: false, // No volver a guardar la sesión si no ha habido cambios
   saveUninitialized: true, // Guardar sesiones no inicializadas
   cookie: { secure: false }, // Cambiar a true al usar HTTPS
@@ -48,17 +53,17 @@ app.use('/auth', loginRoute);
 
 app.get("/", (req, res) => {
   res.send(`<form method="POST" action="/">
-      <label>Nombre: <input type="text" name="nombre" /></label><br>
-      <button type="submit">Enviar</button>
+      <label>Name: <input type="text" name="name" /></label><br>
+      <button type="submit">Submit</button>
     </form>`);
 });
 
 app.post("/", (req, res) => {
-  const nombre = req.body.nombre;
-  res.send(`Hola, ${nombre}! Gracias por enviar el formulario.`);
+  const name = req.body.name;
+  res.send(`Hello, ${name}! Thanks for submitting the form.`);
 });
 
 
 app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
+  console.log(`Server listening on port ${port}`);
 });

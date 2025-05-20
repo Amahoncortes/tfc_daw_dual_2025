@@ -384,12 +384,10 @@ devops-hub/
        const query = `INSERT INTO users (username, password) VALUES (?, ?)`;
        db.run(query, [username, hashedPassword], function (err) {
          if (err) {
-           return res
-             .status(500)
-             .json({
-               error: "Error al insertar usuario",
-               details: err.message,
-             });
+           return res.status(500).json({
+             error: "Error al insertar usuario",
+             details: err.message,
+           });
          }
          res
            .status(201)
@@ -655,12 +653,10 @@ devops-hub/
                .status(400)
                .json({ error: "El username ya está en uso" });
            }
-           return res
-             .status(500)
-             .json({
-               error: "Error al insertar usuario",
-               details: err.message,
-             });
+           return res.status(500).json({
+             error: "Error al insertar usuario",
+             details: err.message,
+           });
          }
          res
            .status(201)
@@ -845,12 +841,10 @@ devops-hub/
      const checkQuery = `SELECT id FROM projects WHERE id = ? AND user_id = ?`;
      db.get(checkQuery, [projectId, userId], (err, project) => {
        if (err) {
-         return res
-           .status(500)
-           .json({
-             error: "Error al verificar proyecto",
-             details: err.message,
-           });
+         return res.status(500).json({
+           error: "Error al verificar proyecto",
+           details: err.message,
+         });
        }
 
        if (!project) {
@@ -861,12 +855,10 @@ devops-hub/
        const updateQuery = `UPDATE projects SET name = ?, description = ? WHERE id = ?`;
        db.run(updateQuery, [name, description, projectId], function (err) {
          if (err) {
-           return res
-             .status(500)
-             .json({
-               error: "Error al actualizar proyecto",
-               details: err.message,
-             });
+           return res.status(500).json({
+             error: "Error al actualizar proyecto",
+             details: err.message,
+           });
          }
 
          res.json({
@@ -888,12 +880,10 @@ devops-hub/
      const checkQuery = `SELECT id FROM projects WHERE id = ? AND user_id = ?`;
      db.get(checkQuery, [projectId, userId], (err, project) => {
        if (err) {
-         return res
-           .status(500)
-           .json({
-             error: "Error al verificar proyecto",
-             details: err.message,
-           });
+         return res.status(500).json({
+           error: "Error al verificar proyecto",
+           details: err.message,
+         });
        }
 
        if (!project) {
@@ -904,12 +894,10 @@ devops-hub/
        const deleteQuery = `DELETE FROM projects WHERE id = ?`;
        db.run(deleteQuery, [projectId], function (err) {
          if (err) {
-           return res
-             .status(500)
-             .json({
-               error: "Error al eliminar proyecto",
-               details: err.message,
-             });
+           return res.status(500).json({
+             error: "Error al eliminar proyecto",
+             details: err.message,
+           });
          }
 
          res.json({ message: "Proyecto eliminado" });
@@ -1876,50 +1864,53 @@ devops-hub/
    ```
 
 3. Script para el funcionamiento del dashboard (`public/js/dashboard.js`):
+
    ```js
-   document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener("DOMContentLoaded", function () {
      // Elementos del DOM
-     const projectsList = document.getElementById('projects-list');
-     const newProjectBtn = document.getElementById('new-project-btn');
-     const projectModal = document.getElementById('project-modal');
-     const modalTitle = document.getElementById('modal-title');
-     const projectForm = document.getElementById('project-form');
-     const projectIdInput = document.getElementById('project-id');
-     const projectNameInput = document.getElementById('project-name');
-     const projectDescriptionInput = document.getElementById('project-description');
-     const closeModalBtns = document.querySelectorAll('.close-modal');
+     const projectsList = document.getElementById("projects-list");
+     const newProjectBtn = document.getElementById("new-project-btn");
+     const projectModal = document.getElementById("project-modal");
+     const modalTitle = document.getElementById("modal-title");
+     const projectForm = document.getElementById("project-form");
+     const projectIdInput = document.getElementById("project-id");
+     const projectNameInput = document.getElementById("project-name");
+     const projectDescriptionInput = document.getElementById(
+       "project-description"
+     );
+     const closeModalBtns = document.querySelectorAll(".close-modal");
 
      // Cargar proyectos al iniciar
      loadProjects();
 
      // Event listeners
-     newProjectBtn.addEventListener('click', openNewProjectModal);
-     projectForm.addEventListener('submit', handleProjectSubmit);
-     closeModalBtns.forEach(btn => {
-       btn.addEventListener('click', closeModal);
+     newProjectBtn.addEventListener("click", openNewProjectModal);
+     projectForm.addEventListener("submit", handleProjectSubmit);
+     closeModalBtns.forEach((btn) => {
+       btn.addEventListener("click", closeModal);
      });
 
      // Función para cargar los proyectos
      async function loadProjects() {
        try {
-         const response = await fetch('/projects');
+         const response = await fetch("/projects");
          const projects = await response.json();
 
          if (response.ok) {
            renderProjects(projects);
          } else {
-           showError('Error al cargar proyectos');
+           showError("Error al cargar proyectos");
          }
        } catch (error) {
-         console.error('Error al cargar proyectos:', error);
-         showError('Error al conectar con el servidor');
+         console.error("Error al cargar proyectos:", error);
+         showError("Error al conectar con el servidor");
        }
      }
 
      // Función para renderizar los proyectos
      function renderProjects(projects) {
        // Limpiar el contenedor
-       projectsList.innerHTML = '';
+       projectsList.innerHTML = "";
 
        if (projects.length === 0) {
          projectsList.innerHTML = `
@@ -1931,89 +1922,98 @@ devops-hub/
        }
 
        // Renderizar cada proyecto
-       projects.forEach(project => {
-         const projectCard = document.createElement('div');
-         projectCard.className = 'project-card';
+       projects.forEach((project) => {
+         const projectCard = document.createElement("div");
+         projectCard.className = "project-card";
          projectCard.innerHTML = `
            <h3>${escapeHtml(project.name)}</h3>
-           <p class="description">${escapeHtml(project.description || 'Sin descripción')}</p>
+           <p class="description">${escapeHtml(
+             project.description || "Sin descripción"
+           )}</p>
            <p class="meta">Creado: ${formatDate(project.created_at)}</p>
            <div class="project-actions">
              <button class="edit-btn" data-id="${project.id}">Editar</button>
-             <button class="delete-btn" data-id="${project.id}">Eliminar</button>
+             <button class="delete-btn" data-id="${
+               project.id
+             }">Eliminar</button>
            </div>
          `;
 
          projectsList.appendChild(projectCard);
 
          // Agregar event listeners a los botones
-         const editBtn = projectCard.querySelector('.edit-btn');
-         const deleteBtn = projectCard.querySelector('.delete-btn');
+         const editBtn = projectCard.querySelector(".edit-btn");
+         const deleteBtn = projectCard.querySelector(".delete-btn");
 
-         editBtn.addEventListener('click', () => openEditProjectModal(project));
-         deleteBtn.addEventListener('click', () => deleteProject(project.id));
+         editBtn.addEventListener("click", () => openEditProjectModal(project));
+         deleteBtn.addEventListener("click", () => deleteProject(project.id));
        });
      }
 
      // Función para abrir el modal para un nuevo proyecto
      function openNewProjectModal() {
-       modalTitle.textContent = 'Nuevo Proyecto';
-       projectIdInput.value = '';
-       projectNameInput.value = '';
-       projectDescriptionInput.value = '';
-       projectModal.classList.remove('hidden');
+       modalTitle.textContent = "Nuevo Proyecto";
+       projectIdInput.value = "";
+       projectNameInput.value = "";
+       projectDescriptionInput.value = "";
+       projectModal.classList.remove("hidden");
      }
-
-     // Función para abrir el modal para editar un proyecto
+   });
+   // Función para abrir el modal para editar un proyecto
    function openEditProjectModal(project) {
-   modalTitle.textContent = 'Editar Proyecto';
-   projectIdInput.value = project.id;
-   projectNameInput.value = project.name;
-   projectDescInput.value = project.description;
-   projectModal.style.display = 'block';
+     modalTitle.textContent = "Editar Proyecto";
+     projectIdInput.value = project.id;
+     projectNameInput.value = project.name;
+     projectDescInput.value = project.description;
+     projectModal.style.display = "block";
    }
 
-   projectForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+   projectForm.addEventListener("submit", async (e) => {
+     e.preventDefault();
+   });
+   ```
 
-  const id = projectIdInput.value;
-  const name = projectNameInput.value;
-  const description = projectDescInput.value;
+const id = projectIdInput.value;
+const name = projectNameInput.value;
+const description = projectDescInput.value;
 
-  const payload = { name, description };
+const payload = { name, description };
 
-  try {
-    const response = await fetch(id ? `/projects/${id}` : '/projects', {
-      method: id ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+try {
+const response = await fetch(id ? `/projects/${id}` : '/projects', {
+method: id ? 'PUT' : 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(payload)
+});
 
     if (!response.ok) throw new Error('Error al guardar el proyecto');
     projectModal.style.display = 'none';
     loadProjects();
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
+
+} catch (error) {
+console.error(error);
+alert(error.message);
+}
 
 async function loadProjects() {
-  const res = await fetch('/projects');
-  const projects = await res.json();
+const res = await fetch('/projects');
+const projects = await res.json();
 
-  const list = document.getElementById('projectList');
-  list.innerHTML = '';
+const list = document.getElementById('projectList');
+list.innerHTML = '';
 
-  projects.forEach(project => {
-    const item = document.createElement('div');
-    item.innerHTML = `
-      <strong>${project.name}</strong><br>
+projects.forEach(project => {
+const item = document.createElement('div');
+item.innerHTML = `     <strong>${project.name}</strong><br>
       ${project.description}<br>
       <button onclick='openEditProjectModal(${JSON.stringify(project)})'>Editar</button>
-    `;
-    list.appendChild(item);
-  });
+  `;
+list.appendChild(item);
+});
 }
 
 window.onload = loadProjects;
+
+```
+
 ```
