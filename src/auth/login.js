@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/database");
 const bcrypt = require("bcrypt");
-const { preventLoginifAuthenticated, isAuthenticated } = require("../middleware/auth");
+const {isAuthenticated } = require("../middleware/auth");
 
 // POST /auth/login - Iniciar sesión
-router.post("/login", preventLoginifAuthenticated, (req, res) => {
+router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
