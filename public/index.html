@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Login - DevOps Hub</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0; url=login.html" />
+  <title>Redireccionando a Login...</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f8f9fa;
+      padding: 2rem;
+    }
+    .spinner {
+      margin-top: 1rem;
+      width: 2rem;
+      height: 2rem;
+      border: 0.3rem solid #ccc;
+      border-top-color: #0d6efd;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <h1>Log in</h1>
-  <form method="POST" action="/auth/login">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    <button type="submit">Log in</button>
-  </form>
-  <script>
-    fetch('/auth/whoami')
-      .then(res => res.json())
-      .then(data => {
-        if (data.isLoggedIn) {
-          window.location.href = '/views/welcome.html';
-        }
-      });
-  </script>
+  <h1>Redirigiendo a DevOps Hub...</h1>
+  <p>Si no eres redirigido automáticamente, <a href="login.html">haz clic aquí</a>.</p>
+  <div class="spinner"></div>
 </body>
 </html>

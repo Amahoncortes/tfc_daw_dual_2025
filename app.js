@@ -15,54 +15,35 @@ const port = 3000;
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, "public"));
 app.use(connectLivereload());
-
-// Middleware para servir archivos estáticos desde la carpeta "public"
-app.use(express.static(path.join(__dirname, "public")));
-
-// Recargar el navegador cuando cambien archivos
 liveReloadServer.server.once("connection", () => {
   setTimeout(() => {
     liveReloadServer.refresh("/");
   }, 100);
 });
 
-// Añadir para prevenir que la request venga nula
-app.use(express.json());
+// 2. Servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware para procesar datos del formulario
+// 3. Middleware para parseo de datos
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//Middleware para procesar el manejo de sesiones
+// 4. Middleware de sesiones
 app.use(session({
   store: new SQLiteStore({
     db: 'sessions.sqlite',
     dir: path.join(__dirname, 'src', 'db'),
   }),
-  secret: 'devops_hub_secret_key', // Cambiar esto por una clave secreta más segura en producción
-  resave: false, // No volver a guardar la sesión si no ha habido cambios
-  saveUninitialized: true, // Guardar sesiones no inicializadas
-  cookie: { secure: false }, // Cambiar a true al usar HTTPS
-  maxAge: 1000 * 60 * 60 * 24 // 1 día de duración de la sesión
+  secret: 'devops_hub_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false },
+  maxAge: 3600000
 }));
 
-// Middleware para procesar ruta de usuarios
+// 5. Rutas del backend
 app.use('/users', usersRoute);
-
-//Middleware para procesar la ruta de autenticado
 app.use('/auth', loginRoute);
-
-app.get("/", (req, res) => {
-  res.send(`<form method="POST" action="/">
-      <label>Name: <input type="text" name="name" /></label><br>
-      <button type="submit">Submit</button>
-    </form>`);
-});
-
-app.post("/", (req, res) => {
-  const name = req.body.name;
-  res.send(`Hello, ${name}! Thanks for submitting the form.`);
-});
-
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

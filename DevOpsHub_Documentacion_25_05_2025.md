@@ -476,6 +476,79 @@ module.exports = {
 
 ---
 
+
+## Frontend - Gestión de Login y Registro
+
+### Estructura del Frontend
+
+Los archivos del frontend se han organizado en la carpeta `public/`, sirviendo contenido estático desde Express:
+
+```
+devops-hub/
+├── public/
+│   ├── index.html          # Redirige automáticamente a login.html
+│   ├── login.html          # Formulario de inicio de sesión
+│   ├── register.html       # Formulario de registro de usuario
+│   ├── dashboard.html      # Panel principal (por implementar)
+│   ├── css/
+│   │   └── style.css       # Estilos personalizados y de Bootstrap
+│   └── js/
+│       ├── auth.js         # Lógica JS para login
+│       └── register.js     # Lógica JS para registro
+```
+
+La línea `app.use(express.static(path.join(__dirname, 'public')));` en `app.js` permite servir estos archivos directamente desde Express.
+
+---
+
+### Lógica de Login
+
+- `login.html` contiene un formulario que recoge `username` y `password`.
+- `auth.js` envía una petición `POST` a `/auth/login` usando `fetch()`, incluyendo la cookie de sesión (`credentials: 'include'`).
+- Si el login es exitoso, redirige al `dashboard.html`.
+- Se utiliza un spinner y se muestran errores en la interfaz.
+
+---
+
+### Lógica de Registro
+
+- `register.html` contiene un formulario similar al de login.
+- `register.js` envía los datos al endpoint `POST /users`.
+- Si el registro tiene éxito, redirige a `login.html`.
+- Valida longitud mínima de nombre de usuario y contraseña.
+
+---
+
+### Redirección desde la raíz (`/`)
+
+Se ha creado un archivo `index.html` con la siguiente lógica de redirección:
+
+```html
+<script>
+  window.location.replace("login.html");
+</script>
+```
+
+Esto asegura que al visitar `http://localhost:3000/`, el usuario sea redirigido a `login.html`, incluso en navegadores como Firefox donde `<meta http-equiv="refresh">` puede fallar.
+
+---
+
+### Estilos personalizados
+
+- Se ha creado `public/css/style.css` con variables CSS y mejoras visuales.
+- Se utiliza Bootstrap 5 para la maquetación responsive y componentes.
+- Los formularios y botones tienen animaciones suaves, esquinas redondeadas y validación visual clara.
+
+---
+
+### Consideraciones de compatibilidad
+
+- Se ha detectado que Firefox puede bloquear conexiones WebSocket inyectadas por extensiones como Live Preview.
+- Se recomienda no usar "Live Preview" para abrir los HTML.
+- En su lugar, acceder a `http://localhost:3000/` manualmente desde el navegador asegura comportamiento correcto.
+
+---
+
 ## Fase de Transición
 
 *[Esta sección se actualizará cuando se implementen las funcionalidades correspondientes]*
