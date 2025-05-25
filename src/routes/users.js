@@ -19,14 +19,19 @@ router.post("/", async (req, res) => {
 
     const query = "INSERT INTO users (username, password) VALUES (?, ?)";
     db.run(query, [username, hashedPassword], function (err) {
-      if (err.message.includes("UNIQUE")) {
+      if (err && err.message && err.message.includes("UNIQUE")) {
         return res
           .status(409)
           .json({ error: "El nombre de usuario ya está en uso." });
       }
+      if (err) {
+        return res
+          .status(500)
+          .json({ error: "Error al crear usuario", details: err.message });
+      }
       res
         .status(201)
-        .json({ message: "User created successfully", userId: this.lastID });
+        .json({ message: "Usuario creado exitosamente", userId: this.lastID });
     });
   } catch (error) {
     return res

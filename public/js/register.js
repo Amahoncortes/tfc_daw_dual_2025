@@ -30,26 +30,23 @@ form.addEventListener("submit", async (e) => {
   }
 
   try {
-    // Enviar petición al backend
     const response = await fetch("/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
 
-    const result = await response.json();
-
-    if (response.ok) {
-      // Mostrar mensaje de éxito y redirigir
-      showSuccess("Usuario registrado correctamente. Redirigiendo a login...");
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 2000);
-    } else {
-      showError(result.error || "Error al registrar usuario.");
+    if (!response.ok) {
+      const result = await response.json();
+      throw new Error(result.error || "Error al registrar usuario.");
     }
+
+    showSuccess("Usuario registrado correctamente. Redirigiendo a login...");
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 2000);
   } catch (err) {
-    showError("Error de conexión con el servidor.");
+    showError(err.message || "Error de conexión con el servidor.");
   }
 
   spinner.classList.add("d-none");
