@@ -10,10 +10,10 @@ function isAuthenticated(req, res, next) {
 // Middleware para verificar si el usuario no está autenticado
 function preventLoginifAuthenticated(req, res, next) {
   if (req.session && req.session.isLoggedIn) {
-    return res.status(401).json({ error: "You are already logged in." });
-  } else {
-    return next();
+    // Responder con éxito silencioso para permitir redirección
+    return res.status(200).json({ message: "Already logged in" });
   }
+  next();
 }
 
 module.exports = {

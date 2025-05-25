@@ -19,10 +19,10 @@ router.post("/", async (req, res) => {
 
     const query = "INSERT INTO users (username, password) VALUES (?, ?)";
     db.run(query, [username, hashedPassword], function (err) {
-      if (err) {
+      if (err.message.includes("UNIQUE")) {
         return res
-          .status(500)
-          .json({ error: "Error inserting the user. It has already been created", details: err.message });
+          .status(409)
+          .json({ error: "El nombre de usuario ya está en uso." });
       }
       res
         .status(201)
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 });
 
 //Endpoint para listar usuarios
-router.get("/", (req, res) => {
+router.get("/", isAuthenticated, (req, res) => {
   const query = "SELECT id, username FROM users";
   db.all(query, [], (err, rows) => {
     if (err) {
@@ -50,10 +50,10 @@ router.get("/", (req, res) => {
 
 //Endpoint para eliminar un usuario
 router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
-  const userId = req.params.id;
+  const userId = parseInt(req.params.id);
 
   //Verificar que el ID del usuario sea un número válido
-  if (!userId || isNaN(userId)) {
+  if (isNaN(userId)) {
     return res.status(400).json({ error: "Invalid user ID." });
   }
 
@@ -76,7 +76,9 @@ router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
           .status(500)
           .json({ error: "Error deleting user", details: err.message });
       }
-      res.status(200).json({ message: "User deleted successfully", userId: userId });
+      res
+        .status(200)
+        .json({ message: "User deleted successfully", userId: userId });
     });
   });
 });

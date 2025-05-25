@@ -1,53 +1,58 @@
 // register.js — Registro de usuario para DevOps Hub
 
-const form = document.getElementById('registerForm');
-const alertContainer = document.getElementById('alertContainer');
-const registerBtn = document.getElementById('registerBtn');
-const spinner = document.getElementById('registerSpinner');
+const form = document.getElementById("registerForm");
+const alertContainer = document.getElementById("alertContainer");
+const registerBtn = document.getElementById("registerBtn");
+const spinner = document.getElementById("registerSpinner");
 
-form.addEventListener('submit', async (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault(); // Evitar recarga de página
 
   // Limpiar alertas previas
-  alertContainer.innerHTML = '';
+  alertContainer.innerHTML = "";
 
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value;
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
 
   // Validaciones básicas (frontend)
   if (username.length < 3 || password.length < 4) {
-    return showError('El nombre de usuario o la contraseña son demasiado cortos.');
+    return showError(
+      "El nombre de usuario o la contraseña son demasiado cortos."
+    );
   }
 
-  // Mostrar spinner y desactivar botón
-  spinner.classList.remove('d-none');
-  registerBtn.disabled = true;
+  if (password !== confirmPassword) {
+    showError("Las contraseñas no coinciden.");
+    spinner.classList.add("d-none");
+    registerBtn.disabled = false;
+    return;
+  }
 
   try {
     // Enviar petición al backend
-    const response = await fetch('/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+    const response = await fetch("/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
     });
 
     const result = await response.json();
 
     if (response.ok) {
       // Mostrar mensaje de éxito y redirigir
-      showSuccess('Usuario registrado correctamente. Redirigiendo a login...');
+      showSuccess("Usuario registrado correctamente. Redirigiendo a login...");
       setTimeout(() => {
-        window.location.href = 'login.html';
+        window.location.href = "login.html";
       }, 2000);
     } else {
-      showError(result.error || 'Error al registrar usuario.');
+      showError(result.error || "Error al registrar usuario.");
     }
-
   } catch (err) {
-    showError('Error de conexión con el servidor.');
+    showError("Error de conexión con el servidor.");
   }
 
-  spinner.classList.add('d-none');
+  spinner.classList.add("d-none");
   registerBtn.disabled = false;
 });
 
