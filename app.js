@@ -7,6 +7,7 @@ const SQLiteStore = require('connect-sqlite3')(session);
 const livereload = require('livereload');
 const connectLivereload = require('connect-livereload');
 const path = require('path');
+const projectsRoute = require('./src/routes/project');
 
 const app = express();
 const port = 3000;
@@ -44,6 +45,9 @@ app.use(session({
 // 5. Rutas del backend
 app.use('/users', usersRoute);
 app.use('/auth', loginRoute);
+
+// Ruta de proyectos
+app.use('/projects', projectsRoute);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

@@ -1,34 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DevOps Hub - Panel</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="css/style.css" rel="stylesheet" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevOps Hub - Panel</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="css/style.css" rel="stylesheet" />
 
-  <!-- Protección: redirigir al login si no hay sesión -->
-  <script src="js/protectDashboard.js"></script>
-</head>
-<body class="bg-light">
+    <!-- Protección: redirigir al login si no hay sesión -->
+    <script src="js/protectDashboard.js"></script>
+  </head>
+  <body class="bg-light">
+    <div class="container mt-5">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h2 class="mb-0">Bienvenido a DevOps Hub</h2>
+        </div>
+        <div class="card-body">
+          <p id="welcomeMessage">Cargando datos del usuario...</p>
 
-  <div class="container mt-5">
-    <div class="card shadow">
-      <div class="card-header bg-primary text-white text-center">
-        <h2 class="mb-0">Bienvenido a DevOps Hub</h2>
-      </div>
-      <div class="card-body">
-        <p id="welcomeMessage">Cargando datos del usuario...</p>
+          <hr />
 
-        <button id="logoutBtn" class="btn btn-danger">
-          Cerrar sesión
-        </button>
+          <!-- Formulario para crear proyecto -->
+          <h5>Crear nuevo proyecto</h5>
+          <form id="projectForm" class="mb-4">
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="projectName"
+                placeholder="Nombre del proyecto"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <textarea
+                class="form-control"
+                id="projectDescription"
+                placeholder="Descripción (opcional)"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">
+              Crear Proyecto
+            </button>
+            <div id="projectAlert" class="mt-2"></div>
+          </form>
+
+          <!-- Lista de proyectos -->
+          <h5>Tus proyectos</h5>
+          <ul id="projectList" class="list-group"></ul>
+
+          <button id="logoutBtn" class="btn btn-danger">Cerrar sesión</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/dashboard.js"></script>
-</body>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
 </html>

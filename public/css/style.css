@@ -194,3 +194,7 @@ a {
     border-left-color: var(--success-color);
     transform: translateX(5px);
 }
+
+#projectAlert .alert {
+  margin-top: 10px;
+}

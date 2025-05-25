@@ -5,20 +5,27 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 ## Índice
 
 1. [Fase de Inicio](#fase-de-inicio)
+
    - [Definición del Producto Mínimo Viable](#definición-del-producto-mínimo-viable)
    - [Análisis de Requisitos](#análisis-de-requisitos)
    - [Identificación de Riesgos](#identificación-de-riesgos)
 
 2. [Fase de Elaboración](#fase-de-elaboración)
+
    - [Estructura de Carpetas del Proyecto](#estructura-de-carpetas-del-proyecto)
    - [Configuración de Express y Dependencias](#configuración-de-express-y-dependencias)
    - [Configuración Inicial de SQLite](#configuración-inicial-de-sqlite)
    - [Gestión de Usuarios](#gestión-de-usuarios)
 
 3. [Fase de Construcción](#fase-de-construcción)
+
    - [Sistema de Autenticación](#sistema-de-autenticación)
    - [Middlewares de Autorización](#middlewares-de-autorización)
    - [Manejo de Sesiones](#manejo-de-sesiones)
+   - [Gestión de Interfaces](#frontend---gestión-de-interfaces)
+   - [Gestión de Proyectos](#gestión-de-proyectos)
+
+
 
 4. [Fase de Transición](#fase-de-transición)
    - [Pendiente de implementar]
@@ -32,6 +39,7 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 **DevOps Hub** será una plataforma web que centralizará las herramientas necesarias para el ciclo de vida de desarrollo de software, con el siguiente alcance para el MVP:
 
 **Funcionalidades incluidas en el MVP:**
+
 - Sistema de autenticación básico (registro/login)
 - Dashboard para visualizar proyectos
 - Creación de proyectos nuevos
@@ -39,6 +47,7 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 - Medidas de seguridad básicas (validación de formularios y consultas parametrizadas)
 
 **Funcionalidades excluidas del MVP:**
+
 - Implementación completa de CI/CD
 - Orquestación de contenedores
 - Gestión avanzada de repositorios
@@ -48,6 +57,7 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 ### Análisis de Requisitos
 
 **HU1: Autenticación**
+
 - Criterios de aceptación:
   - El usuario puede registrarse proporcionando email y contraseña
   - El usuario puede iniciar sesión con sus credenciales
@@ -56,6 +66,7 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 - Implementación técnica: Autenticación básica con sesiones en el backend; formulario de login en el frontend
 
 **HU2: Crear proyectos**
+
 - Criterios de aceptación:
   - El usuario puede crear un nuevo proyecto desde el dashboard
   - Se solicitan datos básicos: nombre, descripción
@@ -63,6 +74,7 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 - Implementación técnica: Modelo de datos para proyectos y API REST para altas
 
 **HU3: Visualizar proyectos**
+
 - Criterios de aceptación:
   - El dashboard muestra todos los proyectos del usuario
   - Se muestra información básica: nombre, descripción, fecha de creación
@@ -70,6 +82,7 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 - Implementación técnica: Consulta de la base de datos y renderizado en el frontend
 
 **HU4: Conectar con GitHub**
+
 - Criterios de aceptación:
   - El usuario puede vincular su cuenta de GitHub
   - Se muestran los repositorios disponibles para el usuario
@@ -77,6 +90,7 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 - Implementación técnica: Uso de la API de GitHub para autenticación básica y listado de repos (solo lectura)
 
 **HU5: Seguridad**
+
 - Criterios de aceptación:
   - Se validan todos los formularios en frontend y backend
   - Se usan consultas parametrizadas para prevenir SQL injection
@@ -88,13 +102,13 @@ Este documento registra el desarrollo completo del proyecto DevOps Hub, incluyen
 
 **Matriz de Riesgos:**
 
-| Riesgo | Impacto | Probabilidad | Estrategia de Mitigación |
-|--------|---------|--------------|--------------------------|
-| Dificultad con las nuevas tecnologías | Alto | Alta | Comenzar con tutoriales básicos, mantener la solución simple, y buscar ejemplos prácticos para cada componente |
-| Problemas de integración con GitHub API | Medio | Media | Comenzar con integración básica, usar bibliotecas probadas para la autenticación OAuth |
-| Problemas de seguridad en la aplicación | Alto | Media | Seguir prácticas estándar de seguridad, emplear validaciones robustas |
-| Atrasos en el cronograma | Alto | Alta | Priorizar funcionalidades core, simplificar donde sea posible, y mantener un MVP mínimo pero completo |
-| Problemas con la estructura de la base de datos | Medio | Media | Diseñar un esquema simple y flexible, haciendo un prototipo temprano |
+| Riesgo                                          | Impacto | Probabilidad | Estrategia de Mitigación                                                                                       |
+| ----------------------------------------------- | ------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| Dificultad con las nuevas tecnologías           | Alto    | Alta         | Comenzar con tutoriales básicos, mantener la solución simple, y buscar ejemplos prácticos para cada componente |
+| Problemas de integración con GitHub API         | Medio   | Media        | Comenzar con integración básica, usar bibliotecas probadas para la autenticación OAuth                         |
+| Problemas de seguridad en la aplicación         | Alto    | Media        | Seguir prácticas estándar de seguridad, emplear validaciones robustas                                          |
+| Atrasos en el cronograma                        | Alto    | Alta         | Priorizar funcionalidades core, simplificar donde sea posible, y mantener un MVP mínimo pero completo          |
+| Problemas con la estructura de la base de datos | Medio   | Media        | Diseñar un esquema simple y flexible, haciendo un prototipo temprano                                           |
 
 ---
 
@@ -181,6 +195,7 @@ devops-hub/
 ### Configuración de Express y Dependencias
 
 1. Inicialización del proyecto:
+
    ```bash
    npm init -y
    ejecutar:
@@ -188,6 +203,7 @@ devops-hub/
    ```
 
 2. Instalación de dependencias:
+
    ```bash
    npm install express
    npm install --save-dev nodemon
@@ -196,6 +212,7 @@ devops-hub/
    ```
 
 3. Configuración del script de desarrollo en `package.json`:
+
    ```json
    "scripts": {
      "dev": "nodemon src/app.js"
@@ -203,19 +220,20 @@ devops-hub/
    ```
 
 4. Servidor básico Express en `app.js`:
+
    ```js
-   const express = require('express');
+   const express = require("express");
    const app = express();
    const port = 3000;
 
    app.use(express.json());
 
-   app.get('/', (req, res) => {
-     res.send('GET recibido');
+   app.get("/", (req, res) => {
+     res.send("GET recibido");
    });
 
-   app.post('/', (req, res) => {
-     res.send('POST recibido');
+   app.post("/", (req, res) => {
+     res.send("POST recibido");
    });
 
    app.listen(port, () => {
@@ -226,21 +244,23 @@ devops-hub/
 ### Configuración Inicial de SQLite
 
 1. Instalación de SQLite:
+
    ```bash
    npm install sqlite3
    ```
 
 2. Archivo de conexión a base de datos (`src/db/database.js`):
-   ```js
-   const sqlite3 = require('sqlite3').verbose();
-   const path = require('path');
 
-   const dbPath = path.resolve(__dirname, 'database.sqlite');
+   ```js
+   const sqlite3 = require("sqlite3").verbose();
+   const path = require("path");
+
+   const dbPath = path.resolve(__dirname, "database.sqlite");
    const db = new sqlite3.Database(dbPath, (err) => {
      if (err) {
-       console.error('Error al conectar con la base de datos:', err);
+       console.error("Error al conectar con la base de datos:", err);
      } else {
-       console.log('Conectado a la base de datos SQLite');
+       console.log("Conectado a la base de datos SQLite");
      }
    });
 
@@ -248,8 +268,9 @@ devops-hub/
    ```
 
 3. Script de inicialización con creación de tabla (`src/db/init.js`):
+
    ```js
-   const db = require('./database');
+   const db = require("./database");
 
    db.serialize(() => {
      db.run(`
@@ -264,40 +285,45 @@ devops-hub/
 
 4. Importación del script de inicialización en `app.js`:
    ```js
-   require('./db/init');
+   require("./db/init");
    ```
 
 ### Gestión de Usuarios
 
 1. Endpoints REST para usuarios (`src/routes/users.js`):
+
    ```js
-   const express = require('express');
+   const express = require("express");
    const router = express.Router();
-   const db = require('../db/database');
+   const db = require("../db/database");
 
    // POST /users - Crear nuevo usuario
-   router.post('/', (req, res) => {
+   router.post("/", (req, res) => {
      const { username, password } = req.body;
 
      if (!username || !password) {
-       return res.status(400).json({ error: 'Faltan username o password' });
+       return res.status(400).json({ error: "Faltan username o password" });
      }
 
      const query = `INSERT INTO users (username, password) VALUES (?, ?)`;
-     db.run(query, [username, password], function(err) {
+     db.run(query, [username, password], function (err) {
        if (err) {
-         return res.status(500).json({ error: 'Error al insertar usuario', details: err.message });
+         return res
+           .status(500)
+           .json({ error: "Error al insertar usuario", details: err.message });
        }
-       res.status(201).json({ message: 'Usuario creado', userId: this.lastID });
+       res.status(201).json({ message: "Usuario creado", userId: this.lastID });
      });
    });
 
    // GET /users - Obtener lista de usuarios
-   router.get('/', (req, res) => {
+   router.get("/", (req, res) => {
      const query = `SELECT id, username FROM users`;
      db.all(query, [], (err, rows) => {
        if (err) {
-         return res.status(500).json({ error: 'Error al obtener usuarios', details: err.message });
+         return res
+           .status(500)
+           .json({ error: "Error al obtener usuarios", details: err.message });
        }
        res.json(rows);
      });
@@ -307,10 +333,11 @@ devops-hub/
    ```
 
 2. Configuración de rutas en `app.js`:
+
    ```js
-   const express = require('express');
+   const express = require("express");
    const app = express();
-   const usersRoute = require('./routes/users');
+   const usersRoute = require("./routes/users");
 
    // Middleware para procesar datos JSON
    app.use(express.json());
@@ -319,7 +346,7 @@ devops-hub/
    app.use(express.urlencoded({ extended: true }));
 
    // Middleware para las rutas de usuarios
-   app.use('/users', usersRoute);
+   app.use("/users", usersRoute);
    ```
 
 3. Endpoints probados en Postman:
@@ -335,6 +362,7 @@ devops-hub/
 Se ha implementado un sistema completo de autenticación con manejo de sesiones para la aplicación:
 
 1. Creación del enrutador de autenticación (`src/auth/auth.js`):
+
    ```js
    const router = express.Router();
    const db = require("../db/database");
@@ -345,7 +373,7 @@ Se ha implementado un sistema completo de autenticación con manejo de sesiones 
    // POST /auth/login - Iniciar sesión
    router.post("/login", preventLoginifAuthenticated, (req, res) => {
      const { username, password } = req.body;
-     
+
      // Verificar que se envíen el nombre de usuario y la contraseña
      if (!username || !password) {
        return res.status(400).json({ error: "Faltan username o password" });
@@ -363,7 +391,9 @@ Se ha implementado un sistema completo de autenticación con manejo de sesiones 
 
        // Verificar si el usuario existe
        if (!user) {
-         return res.status(401).json({ error: "Usuario o contraseña incorrectos" });
+         return res
+           .status(401)
+           .json({ error: "Usuario o contraseña incorrectos" });
        }
 
        // Verificar la contraseña
@@ -376,14 +406,16 @@ Se ha implementado un sistema completo de autenticación con manejo de sesiones 
          }
 
          if (!result) {
-           return res.status(401).json({ error: "Usuario o contraseña incorrectos" });
+           return res
+             .status(401)
+             .json({ error: "Usuario o contraseña incorrectos" });
          }
 
          // Crear sesión para el usuario autenticado
          req.session.userId = user.id;
          req.session.username = user.username;
          req.session.isLoggedIn = true;
-         
+
          res.json({
            message: "Login successful for the user " + user.username,
            isLoggedIn: req.session.isLoggedIn,
@@ -397,7 +429,7 @@ Se ha implementado un sistema completo de autenticación con manejo de sesiones 
    // GET /auth/logout - Cerrar sesión
    router.get("/logout", isAuthenticated, (req, res) => {
      const username = req.session.username;
-     
+
      // Eliminar los datos de usuario de la sesión
      req.session.destroy((err) => {
        if (err) {
@@ -433,7 +465,9 @@ function isAuthenticated(req, res, next) {
   if (req.session && req.session.isLoggedIn) {
     return next();
   } else {
-    return res.status(401).json({ error: "Acceso denegado. Iniciar sesión primero." });
+    return res
+      .status(401)
+      .json({ error: "Acceso denegado. Iniciar sesión primero." });
   }
 }
 
@@ -448,53 +482,59 @@ function preventLoginifAuthenticated(req, res, next) {
 
 module.exports = {
   isAuthenticated,
-  preventLoginifAuthenticated
+  preventLoginifAuthenticated,
 };
 ```
 
 ### Manejo de Sesiones
 
 1. Configuración de sesiones en `app.js`:
+
    ```js
-   const session = require('express-session');
+   const session = require("express-session");
 
    // Configuración de la sesión
-   app.use(session({
-     secret: 'mi_clave_secreta', // En producción, usar una clave más segura y en variables de entorno
-     resave: false,
-     saveUninitialized: false,
-     cookie: {
-       maxAge: 3600000, // 1 hora de duración para la sesión
-       secure: false // En producción, cambiar a true para usar HTTPS
-     }
-   }));
+   app.use(
+     session({
+       secret: "mi_clave_secreta", // En producción, usar una clave más segura y en variables de entorno
+       resave: false,
+       saveUninitialized: false,
+       cookie: {
+         maxAge: 3600000, // 1 hora de duración para la sesión
+         secure: false, // En producción, cambiar a true para usar HTTPS
+       },
+     })
+   );
 
    // Rutas de autenticación
-   const authRoutes = require('./auth/auth');
-   app.use('/auth', authRoutes);
+   const authRoutes = require("./auth/auth");
+   app.use("/auth", authRoutes);
    ```
 
 ---
-
-
 
 ## Frontend - Gestión de Interfaces
 
 El frontend de DevOps Hub ha sido desarrollado con HTML, CSS, JavaScript y Bootstrap, ubicado en la carpeta `public/`. A continuación se detallan las principales pantallas y scripts:
 
 ### 📄 login.html
+
 Contiene un formulario de inicio de sesión centrado, estilizado con Bootstrap. Está conectado a `auth.js` que gestiona el envío del formulario vía `fetch()` al endpoint `/auth/login`, mostrando errores y un spinner de carga mientras se procesa.
 
 ### 🧾 register.html
+
 Contiene el formulario de registro con campos de usuario, contraseña y confirmación. Usa `register.js` para validar los campos y enviar la petición a `/users`. Incluye mensajes de error si los datos son inválidos.
 
 ### 📊 dashboard.html
+
 Es el panel principal del usuario autenticado. Está protegido por `protectDashboard.js`, que redirige al login si no hay sesión activa. Usa `dashboard.js` para:
+
 - Obtener el usuario autenticado desde `/auth/status`.
 - Mostrar un saludo personalizado.
 - Gestionar el cierre de sesión mediante `/auth/logout`.
 
 ### 🧠 Scripts JS
+
 - `auth.js`: Envía credenciales del login, gestiona la sesión, errores y redirección.
 - `register.js`: Valida campos del formulario de registro y muestra mensajes.
 - `dashboard.js`: Recupera el estado de sesión y permite hacer logout.
@@ -502,7 +542,9 @@ Es el panel principal del usuario autenticado. Está protegido por `protectDashb
 - `protectDashboard.js`: Script que redirige a `login.html` si el usuario no está autenticado.
 
 ### 🎨 style.css
+
 Estilos personalizados para mejorar la experiencia visual:
+
 - Esquinas redondeadas en tarjetas.
 - Colores personalizados con Bootstrap.
 - Tipografía clara y márgenes espaciados.
@@ -517,15 +559,112 @@ Desde `index.html`, se redirige automáticamente a `login.html` con JavaScript p
 ---
 
 ### 🧪 Mejores prácticas aplicadas
+
 - Uso de `fetch()` con `credentials: 'include'` para mantener cookies de sesión.
 - Separación entre lógica (JS), estructura (HTML) y estilo (CSS).
 - Feedback visual con Bootstrap (`.alert`, `.spinner-border`, `btn`, etc.).
 - Código modular reutilizable para proteger rutas o manejar sesiones.
 
+## Gestión de Proyectos
+
+Se ha implementado la funcionalidad para que los usuarios autenticados puedan crear y visualizar sus propios proyectos desde el dashboard.
+
+---
+
+### 🗃️ Backend: Rutas para proyectos
+
+Archivo: `src/routes/project.js`
+
+- **POST /projects**  
+  Crea un nuevo proyecto con `name` y `description`, vinculado al `user_id` de la sesión.
+
+- **GET /projects**  
+  Devuelve todos los proyectos creados por el usuario autenticado, ordenados por fecha de creación descendente.
+
+Ambas rutas están protegidas con middleware `isAuthenticated`.
+
+Además, se ha creado la tabla `projects` en SQLite con los campos:
+
+- `id`, `user_id`, `name`, `description`, `created_at`
+
+---
+
+### 💻 Frontend: Crear y visualizar proyectos
+
+Archivo: `public/dashboard.html`
+
+Se ha añadido:
+
+- Un formulario para crear un nuevo proyecto (nombre obligatorio, descripción opcional).
+- Una sección donde se listan todos los proyectos del usuario en formato de lista Bootstrap.
+
+Archivo JS: `public/js/dashboard.js`
+
+- Al cargar la vista, se hace un `GET /projects` para poblar la lista.
+- Al enviar el formulario, se hace un `POST /projects`.
+- Se muestran alertas visuales de éxito/error y se actualiza automáticamente la lista tras cada inserción.
+
+---
+
+### 🛡️ Seguridad y control de acceso
+
+- Todas las rutas están protegidas por sesión activa (`req.session.userId`).
+- No es posible ver ni crear proyectos si no se está autenticado.
+
+---
+
+### 🧪 Pruebas realizadas
+
+- ✅ Crear proyectos desde el dashboard (nombre obligatorio)
+- ✅ Ver los proyectos en lista tras crearlos
+- ✅ Comprobar que un usuario no ve los proyectos de otro
+- ✅ Validación de sesión y redirección a login si no está autenticado
+
+---
+
+### 📌 Historias de Usuario Cubiertas
+
+- **HU2**: Crear nuevos proyectos desde la plataforma ✅
+- **HU3**: Visualizar la lista de proyectos en el dashboard ✅
+
+## Validación de la Gestión de Proyectos
+
+Se han realizado pruebas exitosas para verificar el funcionamiento completo de la creación y visualización de proyectos asociados al usuario autenticado.
+
+### ✅ Flujo validado
+
+1. **Inicio de sesión del usuario** en `/auth/login`.
+2. **Creación de un proyecto** desde:
+   - El dashboard de la interfaz web
+   - Herramientas como Postman (enviando JSON a `POST /projects`)
+3. **Visualización automática** de los proyectos en el dashboard tras su creación.
+4. **Listado completo** de proyectos personales en `GET /projects`, verificado desde Postman y desde `dashboard.html`.
+
+### 🧪 Ejemplos de peticiones
+
+#### POST `/projects`
+
+```json
+{
+  "name": "Proyecto Final",
+  "description": "Prueba exitosa de creación"
+}
+```
+
+#### GET `/projects`
+
+```json
+{
+  "id": 1,
+  "name": "Mi primer proyecto",
+  "description": "Proyecto de prueba desde Postman",
+  "created_at": "2025-05-25 21:10:21"
+}
+```
 
 ## Fase de Transición
 
-*[Esta sección se actualizará cuando se implementen las funcionalidades correspondientes]*
+_[Esta sección se actualizará cuando se implementen las funcionalidades correspondientes]_
 
 ---
 

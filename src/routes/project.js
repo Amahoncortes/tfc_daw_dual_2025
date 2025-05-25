@@ -1,0 +1,40 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../db/database');
+const { isAuthenticated } = require('../middleware/auth');
+
+// POST /projects - Crear un nuevo proyecto
+router.post('/', isAuthenticated, (req, res) => {
+  const { name, description } = req.body;
+  const userId = req.session.userId;
+
+  if (!name) {
+    return res.status(400).json({ error: 'El nombre del proyecto es obligatorio' });
+  }
+
+  const query = `INSERT INTO projects (user_id, name, description) VALUES (?, ?, ?)`;
+  db.run(query, [userId, name, description], function (err) {
+    if (err) {
+      return res.status(500).json({ error: 'Error al crear proyecto', details: err.message });
+    }
+    res.status(201).json({
+      message: 'Proyecto creado exitosamente',
+      projectId: this.lastID
+    });
+  });
+});
+
+// GET /projects - Listar proyectos del usuario autenticado
+router.get('/', isAuthenticated, (req, res) => {
+  const userId = req.session.userId;
+  const query = `SELECT id, name, description, created_at FROM projects WHERE user_id = ? ORDER BY created_at DESC`;
+
+  db.all(query, [userId], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error al obtener proyectos', details: err.message });
+    }
+    res.json(rows);
+  });
+});
+
+module.exports = router;
