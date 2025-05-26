@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db/database");
+const db = require("../../db/database");
 const bcrypt = require("bcrypt");
-const {isAuthenticated } = require("../middleware/auth");
+const {isAuthenticated } = require("../../middleware/auth");
 
 // POST /auth/login - Iniciar sesión
 router.post("/login", (req, res) => {
