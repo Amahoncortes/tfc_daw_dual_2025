@@ -668,6 +668,34 @@ _[Esta sección se actualizará cuando se implementen las funcionalidades corres
 
 ---
 
+## Comprobación de sesión sin errores
+
+Durante el desarrollo se detectó un comportamiento no deseado en la ruta `/auth/status`. Al estar protegida por el middleware `isAuthenticated`, el sistema devolvía un error 401 cada vez que se consultaba si había sesión activa desde el frontend, incluso cuando el hecho de no tenerla activa era deseado (por ejemplo, justo después de hacer logout).
+
+### ✅ Solución aplicada
+
+Se eliminó el middleware `isAuthenticated` de la ruta `/auth/status`, y se sustituyó por una verificación manual:
+
+```js
+// GET /auth/status - Verifica si hay sesión activa
+router.get("/status", (req, res) => {
+  if (!req.session || !req.session.isLoggedIn) {
+    return res.json({
+      isLoggedIn: false,
+      message: "No active session"
+    });
+  }
+
+  res.json({
+    isLoggedIn: true,
+    userId: req.session.userId,
+    username: req.session.username,
+    message: `Usuario ${req.session.username} autenticado`
+  });
+});
+
+
+
 ## Notas adicionales y aprendizajes
 
 - Es importante utilizar `express.json()` como middleware para procesar datos JSON en las peticiones, ya que de lo contrario `req.body` será `undefined`.
