@@ -662,6 +662,57 @@ Se han realizado pruebas exitosas para verificar el funcionamiento completo de l
 }
 ```
 
+
+## Integración con GitHub (HU4)
+
+Se ha implementado una integración básica con la API pública de GitHub para mostrar los repositorios públicos del usuario autenticado.
+
+### 🔧 Backend
+
+- Ruta: `GET /github/repos`
+- Middleware: `isAuthenticated`
+- Lógica:
+  - Obtiene el nombre de usuario GitHub desde `req.session.username` o lo fuerza manualmente para testeo
+  - Consulta la API pública de GitHub
+  - Devuelve una lista de repos públicos en formato JSON
+
+```js
+router.get('/', isAuthenticated, async (req, res) => {
+  const username = req.session.username || 'octocat';
+  const response = await fetch(\`https://api.github.com/users/\${username}/repos\`);
+  const data = await response.json();
+  ...
+});
+```
+
+> Se utilizó `node-fetch@2` para garantizar compatibilidad con CommonJS
+
+---
+
+### 💻 Frontend
+
+- `dashboard.html`: Se añadió un botón para cargar repos y un contenedor `<ul>` para listarlos
+- `dashboard.js`:
+  - Usa `fetch('/github/repos')` al hacer clic en el botón
+  - Muestra los repos como elementos de lista
+  - Cada ítem enlaza al repositorio y muestra su descripción
+
+---
+
+### 🧪 Pruebas realizadas
+
+- ✅ Repos visibles en consola y listados correctamente
+- ✅ Verificación de red con `fetch`
+- ✅ Logs en consola confirmando interacción
+- ✅ Manejo de usuarios sin GitHub asignado o sin repos (respuesta vacía)
+
+---
+
+### 📌 Consideraciones
+
+Actualmente, el sistema asume que el nombre de usuario en la app coincide con el de GitHub. Se contempla como mejora futura permitir configurar el GitHub username manualmente en el perfil del usuario.
+
+
 ## Fase de Transición
 
 _[Esta sección se actualizará cuando se implementen las funcionalidades correspondientes]_
