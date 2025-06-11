@@ -65,4 +65,48 @@ router.get("/:id", isAuthenticated, (req, res) => {
   });
 });
 
+// PUT /projects/:id - Actualizar un proyecto existente
+router.put("/:id", isAuthenticated, (req, res) => {
+  const projectId = parseInt(req.params.id);
+  const userId = req.session.userId;
+  const { name, description } = req.body;
+
+  if (!name && !description) {
+    return res
+      .status(400)
+      .json({ error: "Debe proporcionar al menos un campo para actualizar" });
+  }
+
+  const fields = [];
+  const values = [];
+
+  if (name) {
+    fields.push("name = ?");
+    values.push(name);
+  }
+
+  if (description) {
+    fields.push("description = ?");
+    values.push(description);
+  }
+
+  values.push(projectId, userId);
+
+  const query = `UPDATE projects SET ${fields.join(
+    ", "
+  )} WHERE id = ? AND user_id = ?`;
+
+  db.run(query, values, function (err) {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Error al actualizar proyecto", details: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Proyecto no encontrado" });
+    }
+    res.json({ message: "Proyecto actualizado correctamente" });
+  });
+});
+
 module.exports = router;
