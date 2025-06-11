@@ -109,4 +109,23 @@ router.put("/:id", isAuthenticated, (req, res) => {
   });
 });
 
+// DELETE /projects/:id - Eliminar un proyecto
+router.delete("/:id", isAuthenticated, (req, res) => {
+  const projectId = parseInt(req.params.id);
+  const userId = req.session.userId;
+  const query = `DELETE FROM projects WHERE id = ? AND user_id = ?`;
+
+  db.run(query, [projectId, userId], function (err) {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Error al eliminar proyecto", details: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Proyecto no encontrado" });
+    }
+    res.json({ message: "Proyecto eliminado correctamente" });
+  });
+});
+
 module.exports = router;
