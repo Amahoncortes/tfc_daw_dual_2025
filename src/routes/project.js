@@ -46,4 +46,23 @@ router.get("/", isAuthenticated, (req, res) => {
   });
 });
 
+// GET /projects/:id - Obtener detalles de un proyecto específico
+router.get("/:id", isAuthenticated, (req, res) => {
+  const userId = req.session.userId;
+  const projectId = req.params.id;
+  const query = `SELECT id, name, description, created_at FROM projects WHERE user_id = ? AND id = ?`;
+
+  db.get(query, [userId, projectId], (err, row) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Error al obtener proyecto", details: err.message });
+    }
+    if (!row) {
+      return res.status(404).json({ error: "Proyecto no encontrado" });
+    }
+    res.json(row);
+  });
+});
+
 module.exports = router;
