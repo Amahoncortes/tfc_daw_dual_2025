@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Cargar automáticamente al iniciar
+  loadProjects();
+
+  //Mostrado de roles
+  verificarRol();
+
   // Mostrar el nombre del usuario
   fetch("/auth/status", { credentials: "include" })
     .then((res) => res.json())
@@ -88,6 +94,21 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
+  // Función para verificar el rol del usuario
+  function verificarRol() {
+    fetch("/auth/status", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        const infoRol = document.getElementById("rolUsuario");
+        if (infoRol && data.role) {
+          infoRol.innerText = `Rol: ${data.role}`;
+        }
+      })
+      .catch((err) => {
+        console.error("No se pudo obtener el rol del usuario:", err);
+      });
+  }
+
   // Función para ver detalles
   function seeProjects(id) {
     fetch(`/projects/${id}`)
@@ -164,10 +185,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
+  const infoRol = document.getElementById("rolUsuario");
+  infoRol.innerText = `Rol: ${data.role}`;
+
   // Cargar funciones en el DOM
   window.seeProjects = seeProjects;
   window.editProjects = editProjects;
   window.deleteProjects = deleteProjects;
-  // Cargar automáticamente al iniciar
-  loadProjects();
 });

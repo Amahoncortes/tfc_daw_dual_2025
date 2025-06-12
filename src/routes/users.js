@@ -8,6 +8,7 @@ const { canDeleteUser } = require("../middleware/users");
 //Endpoint para crear un nuevo usuario con cifrado de contraseña
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
+  const normalizedUsername = username.toLowerCase();
   if (!username || !password) {
     return res.status(400).json({ error: "Username & password required." });
   }
@@ -18,7 +19,7 @@ router.post("/", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const query = "INSERT INTO users (username, password) VALUES (?, ?)";
-    db.run(query, [username, hashedPassword], function (err) {
+    db.run(query, [normalizedUsername, hashedPassword], function (err) {
       if (err && err.message && err.message.includes("UNIQUE")) {
         return res
           .status(409)

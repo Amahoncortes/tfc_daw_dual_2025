@@ -16,7 +16,17 @@ function preventLoginifAuthenticated(req, res, next) {
   next();
 }
 
+//Middleware para restringir ciertos accesos solo a usuario administrador
+function isAdmin(req, res, next) {
+  if (req.session && req.session.role === "admin") {
+    return next();
+  } else {
+    return res.status(403).json({ error: "Admin access required." });
+  }
+}
+
 module.exports = {
   isAuthenticated,
-  preventLoginifAuthenticated
+  preventLoginifAuthenticated,
+  isAdmin,
 };

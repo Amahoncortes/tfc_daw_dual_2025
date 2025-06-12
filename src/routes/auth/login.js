@@ -11,8 +11,8 @@ router.post("/login", (req, res) => {
   if (!username || !password) {
     return res.status(400).json({ error: "Username & password required." });
   }
-
-  const query = "SELECT * FROM users WHERE username = ?";
+  // Verificar si el usuario existe (ignorando mayúsculas/minúsculas)
+  const query = "SELECT * FROM users WHERE LOWER(username) = LOWER(?)";
   db.get(query, [username], async (err, user) => {
     if (err) {
       return res
@@ -30,6 +30,7 @@ router.post("/login", (req, res) => {
         req.session.userId = user.id;
         req.session.username = user.username;
         req.session.isLoggedIn = true;
+        req.session.role = user.role || "user"; // Asignar rol por defecto si no existe
         return res.status(200).json({ message: "Login successful" });
       } else {
         return res.status(401).json({ error: "Invalid password" });
@@ -73,6 +74,7 @@ router.get("/status", (req, res) => {
     isLoggedIn: true,
     userId: req.session.userId,
     username: req.session.username,
+     role: req.session.role,
     message: `Usuario ${req.session.username} autenticado`
   });
   });
