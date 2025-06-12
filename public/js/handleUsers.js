@@ -1,3 +1,5 @@
+let currentUserId = null;
+
 // Proteger acceso: solo admins
 fetch("/auth/status")
   .then((res) => res.json())
@@ -5,6 +7,7 @@ fetch("/auth/status")
     if (!data.isLoggedIn || data.role !== "admin") {
       window.location.href = "login.html";
     } else {
+      currentUserId = data.userId; // guardar ID actual
       loadUsers();
     }
   })
@@ -19,14 +22,32 @@ function loadUsers() {
       const list = document.getElementById("userList");
       list.innerHTML = "";
 
+      // Ordenar: usuario actual primero, luego por username
+      users.sort((a, b) => {
+        if (a.id === currentUserId) return -1;
+        if (b.id === currentUserId) return 1;
+        return a.username.localeCompare(b.username);
+      });
+
       users.forEach((user) => {
         const li = document.createElement("li");
-        li.className = "list-group-item d-flex justify-content-between align-items-center";
+        li.className =
+          "list-group-item d-flex justify-content-between align-items-center";
+
+        const isCurrent = user.id === currentUserId;
 
         const badge =
           user.role === "admin"
-            ? `<span class="badge bg-danger ms-2"><i class="bi bi-shield-lock-fill"></i> admin</span>`
-            : `<span class="badge bg-secondary ms-2"><i class="bi bi-person-fill"></i> user</span>`;
+            ? `<span class="badge ${
+                isCurrent ? "bg-warning text-dark" : "bg-danger"
+              } ms-2"><i class="bi bi-shield-lock-fill"></i> ${user.role}${
+                isCurrent ? " (tú)" : ""
+              }</span>`
+            : `<span class="badge ${
+                isCurrent ? "bg-info text-dark" : "bg-secondary"
+              } ms-2"><i class="bi bi-person-fill"></i> ${user.role}${
+                isCurrent ? " (tú)" : ""
+              }</span>`;
 
         const newRole = user.role === "admin" ? "user" : "admin";
         const icon =
@@ -35,7 +56,9 @@ function loadUsers() {
             : `<i class="bi bi-person-fill me-1"></i>`;
 
         const btn = `
-          <button class="btn btn-sm btn-outline-primary" onclick="updateRole(${user.id}, '${newRole}')">
+          <button class="btn btn-sm btn-outline-primary" onclick="updateRole(${
+            user.id
+          }, '${newRole}')" ${isCurrent ? "disabled" : ""}>
             ${icon}Cambiar a ${newRole}
           </button>
         `;
@@ -70,3 +93,5 @@ function updateRole(id, newRole) {
       alert("Error al actualizar el rol");
     });
 }
+// Exponer la función para que pueda ser llamada desde el HTML
+window.updateRole = updateRole;
