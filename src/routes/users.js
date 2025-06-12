@@ -4,6 +4,7 @@ const db = require("../db/database");
 const bcrypt = require("bcrypt");
 const { isAuthenticated } = require("../middleware/auth");
 const { canDeleteUser } = require("../middleware/users");
+const { isAdmin } = require("../middleware/auth");
 
 //Endpoint para crear un nuevo usuario con cifrado de contraseña
 router.post("/", async (req, res) => {
@@ -52,7 +53,8 @@ router.post("/", async (req, res) => {
 
 //Endpoint para listar usuarios
 router.get("/", isAuthenticated, (req, res) => {
-  const query = "SELECT id, username FROM users";
+  //Verificar que el usuario es admin
+  const query = "SELECT id, username, role FROM users";
   db.all(query, [], (err, rows) => {
     if (err) {
       return res
@@ -95,6 +97,29 @@ router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
         .status(200)
         .json({ message: "User deleted successfully", userId: userId });
     });
+  });
+});
+
+// PATCH /users/:id/role - Cambiar el rol de un usuario
+router.patch("/:id/role", isAuthenticated, isAdmin, (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { role } = req.body;
+
+  if (!["user", "admin"].includes(role)) {
+    return res.status(400).json({ error: "Rol inválido." });
+  }
+
+  const query = "UPDATE users SET role = ? WHERE id = ?";
+  db.run(query, [role, userId], function (err) {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Error actualizando rol", details: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    res.json({ message: "Rol actualizado correctamente" });
   });
 });
 

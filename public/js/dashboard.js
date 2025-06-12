@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById(
         "welcomeMessage"
       ).textContent = `Hola, ${data.username}! 👋`;
+      if (data.role === "admin") {
+        showAdminButton();
+      }
     });
 
   // Botón de logout
@@ -160,6 +163,18 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((err) => alert("Error al eliminar proyecto"));
   }
 
+  // Mostrar botón de gestión de usuarios si es admin
+  function showAdminButton() {
+    const contenedor = document.getElementById("adminActions");
+    const boton = document.createElement("a");
+
+    boton.href = "handleUsers.html";
+    boton.className = "btn btn-outline-primary";
+    boton.textContent = "Gestionar usuarios";
+
+    contenedor.appendChild(boton);
+  }
+
   //Repositorio de GitHub
   document.getElementById("loadRepos").addEventListener("click", () => {
     fetch("/github/repos", { credentials: "include" })
@@ -192,4 +207,5 @@ document.addEventListener("DOMContentLoaded", () => {
   window.seeProjects = seeProjects;
   window.editProjects = editProjects;
   window.deleteProjects = deleteProjects;
+  window.showAdminButton = showAdminButton;
 });
