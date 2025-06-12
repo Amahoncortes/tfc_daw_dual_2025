@@ -69,14 +69,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
             //Hora formateada
             li.innerHTML = `
-          <strong>${p.name}</strong><br>
-          <small>${p.description || ""}</small><br>
-          <em>${fechaFormateada}</em><br>
+            <strong>${p.name}</strong><br>
+            <small>${p.description || ""}</small><br>
+            <em>${fechaFormateada}</em><br>
+            <button class="btn btn-sm btn-primary mt-1" onclick="seeProjects(${
+              p.id
+            })">Ver</button>
+            <button class="btn btn-sm btn-warning mt-1" onclick="editProjects(${
+              p.id
+            })">Editar</button>
+            <button class="btn btn-sm btn-danger mt-1" onclick="deleteProjects(${
+              p.id
+            })">Eliminar</button>
           `;
             list.appendChild(li);
           });
         }
       });
+  }
+
+  // Función para ver detalles
+  function seeProjects(id) {
+    fetch(`/projects/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        alert(`Proyecto: ${data.name}\nDescripción: ${data.description}`);
+      })
+      .catch((err) => alert("Error al obtener proyecto"));
+  }
+
+  // Función para editar
+  function editProjects(id) {
+    const nuevoNombre = prompt("Nuevo nombre:");
+    const nuevaDescripcion = prompt("Nueva descripción:");
+
+    if (!nuevoNombre && !nuevaDescripcion) {
+      return alert("Debes introducir al menos un cambio.");
+    }
+
+    fetch(`/projects/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: nuevoNombre || undefined,
+        description: nuevaDescripcion || undefined,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert("Proyecto actualizado correctamente");
+        loadProjects(); // Recargar lista
+      })
+      .catch((err) => alert("Error al actualizar proyecto"));
+  }
+
+  // Función para eliminar
+  function deleteProjects(id) {
+    if (!confirm("¿Estás seguro de que quieres eliminar este proyecto?"))
+      return;
+
+    fetch(`/projects/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert("Proyecto eliminado");
+        loadProjects(); // Recargar lista
+      })
+      .catch((err) => alert("Error al eliminar proyecto"));
   }
 
   //Repositorio de GitHub
@@ -104,6 +164,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
+  // Cargar funciones en el DOM
+  window.seeProjects = seeProjects;
+  window.editProjects = editProjects;
+  window.deleteProjects = deleteProjects;
   // Cargar automáticamente al iniciar
   loadProjects();
 });
