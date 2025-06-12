@@ -9,6 +9,9 @@ const { canDeleteUser } = require("../middleware/users");
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
   const normalizedUsername = username.toLowerCase();
+  const supremeRole =
+    req.session && req.session.role === "admin" ? "admin" : "user";
+
   if (!username || !password) {
     return res.status(400).json({ error: "Username & password required." });
   }
@@ -18,22 +21,28 @@ router.post("/", async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const query = "INSERT INTO users (username, password) VALUES (?, ?)";
-    db.run(query, [normalizedUsername, hashedPassword], function (err) {
-      if (err && err.message && err.message.includes("UNIQUE")) {
-        return res
-          .status(409)
-          .json({ error: "El nombre de usuario ya está en uso." });
+    const query =
+      "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+    db.run(
+      query,
+      [normalizedUsername, hashedPassword, supremeRole],
+      function (err) {
+        if (err && err.message && err.message.includes("UNIQUE")) {
+          return res
+            .status(409)
+            .json({ error: "El nombre de usuario ya está en uso." });
+        }
+        if (err) {
+          return res
+            .status(500)
+            .json({ error: "Error al crear usuario", details: err.message });
+        }
+        res.status(201).json({
+          message: "Usuario creado exitosamente",
+          userId: this.lastID,
+        });
       }
-      if (err) {
-        return res
-          .status(500)
-          .json({ error: "Error al crear usuario", details: err.message });
-      }
-      res
-        .status(201)
-        .json({ message: "Usuario creado exitosamente", userId: this.lastID });
-    });
+    );
   } catch (error) {
     return res
       .status(500)

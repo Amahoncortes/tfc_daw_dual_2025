@@ -1,54 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DevOps Hub - Registro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body class="bg-light">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card mt-5 shadow">
-                    <div class="card-header text-center bg-success text-white">
-                        <h3>DevOps Hub</h3>
-                        <p class="mb-0">Crear Cuenta</p>
-                    </div>
-                    <div class="card-body">
-                        <div id="alertContainer"></div>
-                        
-                        <form id="registerForm" method="POST">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                                <div class="form-text">Mínimo 3 caracteres</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                                <div class="form-text">Mínimo 6 caracteres</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                            </div>
-                            <button type="submit" class="btn btn-success w-100" id="registerBtn">
-                                <span id="registerSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
-                                Crear Cuenta
-                            </button>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <p class="mb-0">¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
-                    </div>
-                </div>
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="card mt-5 shadow">
+            <div class="card-header text-center bg-success text-white">
+              <h3>DevOps Hub</h3>
+              <p class="mb-0">Crear Cuenta</p>
             </div>
+            <div class="card-body">
+              <div id="alertContainer"></div>
+
+              <form id="registerForm" method="POST">
+                <div class="mb-3">
+                  <label for="username" class="form-label">Usuario</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    required
+                  />
+                  <div class="form-text">Mínimo 3 caracteres</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Contraseña</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required
+                  />
+                  <div class="form-text">Mínimo 6 caracteres</div>
+                </div>
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label"
+                    >Confirmar Contraseña</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-success w-100"
+                  id="registerBtn"
+                >
+                  <span
+                    id="registerSpinner"
+                    class="spinner-border spinner-border-sm d-none"
+                    role="status"
+                  ></span>
+                  Crear Cuenta
+                </button>
+              </form>
+            </div>
+            <div class="card-footer text-center">
+              <p class="mb-0">
+                ¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a>
+              </p>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/register.js"></script>
-</body>
+  </body>
 </html>
