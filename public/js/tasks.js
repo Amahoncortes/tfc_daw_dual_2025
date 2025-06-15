@@ -1,11 +1,26 @@
 const projectId = new URLSearchParams(window.location.search).get("projectId");
 
 function loadTasks() {
+  const list = document.getElementById("taskList");
+  
+  // Mostrar texto de carga
+  list.innerHTML = `
+    <li class="list-group-item text-center text-muted">
+     Loading tasks...
+    </li>`;
+
   fetch(`/tasks/${projectId}`)
     .then((res) => res.json())
     .then((tasks) => {
-      const list = document.getElementById("taskList");
-      list.innerHTML = "";
+      list.innerHTML = ""; // Limpiar la lista tras cargar
+      if (tasks.length === 0) {
+        list.innerHTML = `
+          <li class="list-group-item text-center text-muted">
+            No tasks yet.
+          </li>`;
+        return;
+      }
+
       tasks.forEach((task) => {
         const li = document.createElement("li");
         li.className =
@@ -13,18 +28,24 @@ function loadTasks() {
         li.innerHTML = `
           <div>
             <strong>${task.title}</strong><br />
-            <small>${task.description || "Sin descripción"}</small><br />
+            <small>${task.description || "No description"}</small><br />
             <span class="badge bg-secondary">${task.status}</span>
           </div>
           <div>
-            <button onclick="deleteTask(${
-              task.id
-            })" class="btn btn-sm btn-danger">Eliminar</button>
+            <button onclick="deleteTask(${task.id})" class="btn btn-sm btn-danger">Delete</button>
           </div>`;
         list.appendChild(li);
       });
+    })
+    .catch((err) => {
+      list.innerHTML = `
+        <li class="list-group-item text-center text-danger">
+          Error loading tasks
+        </li>`;
+      console.error(err);
     });
 }
+
 
 function deleteTask(id) {
   if (!confirm("¿Remove this task?")) return;
