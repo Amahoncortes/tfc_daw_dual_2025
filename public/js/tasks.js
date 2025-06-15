@@ -2,7 +2,7 @@ const projectId = new URLSearchParams(window.location.search).get("projectId");
 
 function loadTasks() {
   const list = document.getElementById("taskList");
-  
+
   // Mostrar texto de carga
   list.innerHTML = `
     <li class="list-group-item text-center text-muted">
@@ -32,7 +32,9 @@ function loadTasks() {
             <span class="badge bg-secondary">${task.status}</span>
           </div>
           <div>
-            <button onclick="deleteTask(${task.id})" class="btn btn-sm btn-danger">Delete</button>
+            <button onclick="deleteTask(${
+              task.id
+            })" class="btn btn-sm btn-danger">Delete</button>
           </div>`;
         list.appendChild(li);
       });
@@ -45,7 +47,6 @@ function loadTasks() {
       console.error(err);
     });
 }
-
 
 function deleteTask(id) {
   if (!confirm("¿Remove this task?")) return;
@@ -86,19 +87,41 @@ function showMessage(msg, isError = false) {
 
 document.getElementById("taskForm").addEventListener("submit", function (e) {
   e.preventDefault();
-  const title = document.getElementById("title").value;
-  const description = document.getElementById("description").value;
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+
+  // Validación
+  if (title === "") {
+    showMessage("Title cannot be empty", true);
+    return;
+  }
+
+  if (title.length > 100) {
+    showMessage("Title is too long (max 100 characters).", true);
+    return;
+  }
+
+  const task = {
+    title,
+    description,
+  };
+
   fetch(`/tasks/${projectId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, description }),
+    body: JSON.stringify(task),
   })
     .then((res) => res.json())
     .then(() => {
+      showMessage("Task created successfully");
       this.reset();
       loadTasks();
+    })
+
+    .catch((err) => {
+      showMessage("Error creating task", true);
+      console.error(err);
     });
 });
 
 loadTasks();
-
