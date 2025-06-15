@@ -21,6 +21,12 @@ function loadTasks() {
         return;
       }
 
+      // Ordenar tareas: pendientes primero, luego completadas
+      tasks.sort((a, b) => {
+        if (a.status === b.status) return 0;
+        return a.status === "pending" ? -1 : 1;
+      });
+
       tasks.forEach((task) => {
         const li = document.createElement("li");
         li.className =
