@@ -25,17 +25,32 @@ function loadTasks() {
         const li = document.createElement("li");
         li.className =
           "list-group-item d-flex justify-content-between align-items-center";
+
         li.innerHTML = `
           <div>
-            <strong>${task.title}</strong><br />
+            <strong ${
+              task.status === "completada"
+                ? 'style="text-decoration: line-through;"'
+                : ""
+            }>
+              ${task.title}
+            </strong><br />
             <small>${task.description || "No description"}</small><br />
-            <span class="badge bg-secondary">${task.status}</span>
+            <span class="badge ${
+              task.status === "completed" ? "bg-success" : "bg-secondary"
+            }">${task.status}</span>
           </div>
-          <div>
+          <div class="btn-group">
+            <button onclick="toggleStatus(${task.id}, '${
+          task.status
+        }')" class="btn btn-sm btn-warning">
+              ${task.status === "completed" ? "↩️" : "✅"}
+            </button>
             <button onclick="deleteTask(${
               task.id
-            })" class="btn btn-sm btn-danger">Delete</button>
+            })" class="btn btn-sm btn-danger">🗑️</button>
           </div>`;
+
         list.appendChild(li);
       });
     })
@@ -44,6 +59,28 @@ function loadTasks() {
         <li class="list-group-item text-center text-danger">
           Error loading tasks
         </li>`;
+      console.error(err);
+    });
+}
+
+function toggleStatus(id, currentStatus) {
+  const newStatus = currentStatus === "completed" ? "pending" : "completed";
+
+  fetch(`/tasks/${id}/status`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status: newStatus }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Error updating task status.");
+      return res.json();
+    })
+    .then(() => {
+      showMessage(`Task marked as ${newStatus}`);
+      loadTasks();
+    })
+    .catch((err) => {
+      showMessage("Error updating task", true);
       console.error(err);
     });
 }
@@ -117,7 +154,6 @@ document.getElementById("taskForm").addEventListener("submit", function (e) {
       this.reset();
       loadTasks();
     })
-
     .catch((err) => {
       showMessage("Error creating task", true);
       console.error(err);

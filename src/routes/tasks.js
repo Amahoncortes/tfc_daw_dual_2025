@@ -16,7 +16,7 @@ router.get("/:projectId", isAuthenticated, (req, res) => {
   );
 });
 
-// Crear una nueva tarea en un proyecto
+// Crear una nueva tarea
 router.post("/:projectId", isAuthenticated, (req, res) => {
   const { title, description } = req.body;
   const projectId = parseInt(req.params.projectId);
@@ -32,7 +32,7 @@ router.post("/:projectId", isAuthenticated, (req, res) => {
   );
 });
 
-// Actualizar una tarea
+// Actualizar una tarea (título, descripción, estado)
 router.put("/:taskId", isAuthenticated, (req, res) => {
   const taskId = parseInt(req.params.taskId);
   const { title, description, status } = req.body;
@@ -46,7 +46,26 @@ router.put("/:taskId", isAuthenticated, (req, res) => {
   );
 });
 
-// Eliminar una tarea
+// Actualizar el estado de una tarea
+router.put("/:taskId/status", isAuthenticated, (req, res) => {
+  const taskId = parseInt(req.params.taskId);
+  const { status } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ error: "Status is required" });
+  }
+
+  db.run(
+    "UPDATE tasks SET status = ? WHERE id = ?",
+    [status, taskId],
+    function (err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: "Task status updated" });
+    }
+  );
+});
+
+// Borrar una tarea
 router.delete("/:taskId", isAuthenticated, (req, res) => {
   const taskId = parseInt(req.params.taskId);
   db.run("DELETE FROM tasks WHERE id = ?", [taskId], function (err) {
