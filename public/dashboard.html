@@ -49,6 +49,23 @@
             <div id="projectAlert" class="mt-2"></div>
           </form>
 
+          <h5>Set GitHub username</h5>
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="githubUsername"
+              placeholder="GitHub username"
+            />
+            <button
+              class="btn btn-outline-dark"
+              onclick="updateGithubUsername()"
+            >
+              Save
+            </button>
+          </div>
+          <small id="githubStatus" class="text-muted d-none"></small>
+
           <!-- Admin actions -->
           <div id="adminActions" class="mt-4"></div>
 
@@ -56,12 +73,11 @@
           <h5>Your Projects</h5>
           <ul id="projectList" class="list-group"></ul>
 
-          <button id="logoutBtn" class="btn btn-danger">Log Out</button>
-
           <hr />
           <h5>Public GitHub Repositories</h5>
           <button id="loadRepos" class="btn btn-dark mb-3">Load Repos</button>
           <ul id="repoList" class="list-group"></ul>
+          <button id="logoutBtn" class="btn btn-danger">Log Out</button>
         </div>
       </div>
     </div>

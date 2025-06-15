@@ -10,8 +10,49 @@ const { isAdmin } = require("../middleware/auth");
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
   const normalizedUsername = username.toLowerCase();
-  const supremeRole =
-    req.session && req.session.role === "admin" ? "admin" : "user";
+  let role = "user";
+
+  // Verificar si es el primer usuario registrado
+  db.get("SELECT COUNT(*) as count FROM users", [], async (err, row) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Error checking user count", details: err.message });
+    }
+
+    if (row.count === 0) {
+      role = "admin"; // Primer usuario se convierte en admin automáticamente
+    }
+
+    try {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      const query =
+        "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+      db.run(query, [normalizedUsername, hashedPassword, role], function (err) {
+        if (err && err.message && err.message.includes("UNIQUE")) {
+          return res
+            .status(409)
+            .json({ error: "El nombre de usuario ya está en uso." });
+        }
+        if (err) {
+          return res
+            .status(500)
+            .json({ error: "Error al crear usuario", details: err.message });
+        }
+        res.status(201).json({
+          message: "Usuario creado exitosamente",
+          userId: this.lastID,
+          role,
+        });
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Error hashing the password", details: error.message });
+    }
+  });
 
   if (!username || !password) {
     return res.status(400).json({ error: "Username & password required." });
@@ -121,6 +162,31 @@ router.patch("/:id/role", isAuthenticated, isAdmin, (req, res) => {
     }
     res.json({ message: "Role updated successfully" });
   });
+});
+
+// PUT /users/github - Update GitHub username for current user
+router.put("/github", isAuthenticated, async (req, res) => {
+  const userId = req.session.userId;
+  const { githubUsername } = req.body;
+
+  if (!githubUsername || typeof githubUsername !== "string") {
+    return res.status(400).json({ error: "GitHub username is required." });
+  }
+
+  db.run(
+    "UPDATE users SET github_username = ? WHERE id = ?",
+    [githubUsername.trim(), userId],
+    function (err) {
+      if (err) {
+        console.error("DB error:", err);
+        return res
+          .status(500)
+          .json({ error: "Error updating GitHub username." });
+      }
+
+      res.json({ message: "GitHub username updated successfully." });
+    }
+  );
 });
 
 module.exports = router;

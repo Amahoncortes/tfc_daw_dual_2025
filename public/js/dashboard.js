@@ -60,8 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const list = document.getElementById("projectList");
         list.innerHTML = "";
         if (projects.length === 0) {
-          list.innerHTML =
-            '<li class="list-group-item">No projects yet.</li>';
+          list.innerHTML = '<li class="list-group-item">No projects yet.</li>';
         } else {
           projects.forEach((p) => {
             const li = document.createElement("li");
@@ -152,8 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para eliminar
   function deleteProjects(id) {
-    if (!confirm("¿Are you sure you want to delete this project?"))
-      return;
+    if (!confirm("¿Are you sure you want to delete this project?")) return;
 
     fetch(`/projects/${id}`, {
       method: "DELETE",
@@ -189,6 +187,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((repos) => {
         const list = document.getElementById("repoList");
         list.innerHTML = "";
+
+        if (!Array.isArray(repos)) {
+          list.innerHTML = `<li class="list-group-item text-danger">Error: ${
+            repos.error || "Unexpected response"
+          }</li>`;
+          return;
+        }
+
         if (repos.length === 0) {
           list.innerHTML =
             '<li class="list-group-item">No repositories found.</li>';
@@ -197,13 +203,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const li = document.createElement("li");
             li.className = "list-group-item";
             li.innerHTML = `
-                    <a href="${repo.url}" target="_blank">
-                      <strong>${repo.name}</strong>
-                    </a><br>
-                    <small>${repo.description || "No description"}</small>`;
+              <a href="${repo.html_url}" target="_blank">
+                <strong>${repo.name}</strong>
+              </a><br>
+              <small>${repo.description || "No description"}</small>`;
             list.appendChild(li);
           });
         }
+      })
+      .catch((err) => {
+        const list = document.getElementById("repoList");
+        list.innerHTML = `<li class="list-group-item text-danger">Fetch error: ${err.message}</li>`;
       });
   });
 
@@ -214,3 +224,35 @@ document.addEventListener("DOMContentLoaded", () => {
   window.viewTasks = viewTasks;
   window.showAdminButton = showAdminButton;
 });
+
+function updateGithubUsername() {
+  const username = document.getElementById("githubUsername").value.trim();
+  const status = document.getElementById("githubStatus");
+
+  if (!username) {
+    alert("Please enter a valid GitHub username.");
+    return;
+  }
+
+  fetch("/users/github", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ githubUsername: username }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Error saving GitHub username.");
+      return res.json();
+    })
+    .then(() => {
+      status.textContent = "GitHub username updated successfully.";
+      status.classList.remove("d-none", "text-danger");
+      status.classList.add("text-success");
+    })
+    .catch((err) => {
+      status.textContent = "Error updating GitHub username.";
+      status.classList.remove("d-none", "text-success");
+      status.classList.add("text-danger");
+      console.error(err);
+    });
+}
