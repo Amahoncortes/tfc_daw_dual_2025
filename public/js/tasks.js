@@ -27,10 +27,40 @@ function loadTasks() {
 }
 
 function deleteTask(id) {
-  if (!confirm("¿Eliminar esta tarea?")) return;
-  fetch(`/tasks/${id}`, { method: "DELETE" })
-    .then((res) => res.json())
-    .then(() => loadTasks());
+  if (!confirm("¿Remove this task?")) return;
+
+  fetch(`/tasks/${id}`, {
+    method: "DELETE",
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Error eliminating task.");
+      return res.json();
+    })
+    .then(() => {
+      showMessage("Task eliminated successfully");
+      loadTasks(); // recargar lista
+    })
+    .catch((err) => {
+      showMessage("Error eliminating task.", true);
+      console.error(err);
+    });
+}
+
+function showMessage(msg, isError = false) {
+  const msgDiv = document.createElement("div");
+  msgDiv.textContent = msg;
+  msgDiv.className = `alert ${isError ? "alert-danger" : "alert-success"}`;
+  msgDiv.style.position = "fixed";
+  msgDiv.style.top = "20px";
+  msgDiv.style.right = "20px";
+  msgDiv.style.zIndex = "9999";
+  msgDiv.style.minWidth = "200px";
+  msgDiv.style.textAlign = "center";
+  document.body.appendChild(msgDiv);
+
+  setTimeout(() => {
+    msgDiv.remove();
+  }, 3000);
 }
 
 document.getElementById("taskForm").addEventListener("submit", function (e) {
@@ -50,3 +80,4 @@ document.getElementById("taskForm").addEventListener("submit", function (e) {
 });
 
 loadTasks();
+
