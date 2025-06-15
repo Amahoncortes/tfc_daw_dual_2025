@@ -11,63 +11,58 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body class="bg-light">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-          <div class="card mt-5 shadow">
-            <div class="card-header text-center bg-primary text-white">
-              <h3>DevOps Hub</h3>
-              <p class="mb-0">Login</p>
-            </div>
-            <div class="card-body">
-              <!-- Contenedor para mostrar errores -->
-              <div id="alertContainer"></div>
+  <body class="bg-light d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow" style="width: 100%; max-width: 380px;">
+      <div class="card-header text-center bg-primary text-white">
+        <h3 class="mb-1">DevOps Hub</h3>
+        <small>Login</small>
+      </div>
+      <div class="card-body">
+        <!-- Contenedor para mostrar errores -->
+        <div id="alertContainer" class="mb-3"></div>
 
-              <!-- Formulario de login -->
-              <form id="loginForm">
-                <div class="mb-3">
-                  <label for="username" class="form-label">Username</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    name="username"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    name="password"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  class="btn btn-primary w-100"
-                  id="loginBtn"
-                >
-                  <span
-                    id="loginSpinner"
-                    class="spinner-border spinner-border-sm d-none"
-                    role="status"
-                  ></span>
-                  Login
-                </button>
-              </form>
-            </div>
-            <div class="card-footer text-center">
-              <p class="mb-0">
-                You don't have an account?
-                <a href="register.html">Register here</a>
-              </p>
-            </div>
+        <!-- Formulario de login -->
+        <form id="loginForm" novalidate>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              required
+            />
           </div>
-        </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100 d-flex align-items-center justify-content-center"
+            id="loginBtn"
+          >
+            <span
+              id="loginSpinner"
+              class="spinner-border spinner-border-sm me-2 d-none"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            Login
+          </button>
+        </form>
+      </div>
+      <div class="card-footer text-center">
+        <small>
+          You don't have an account?
+          <a href="register.html">Register here</a>
+        </small>
       </div>
     </div>
 
