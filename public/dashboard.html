@@ -10,29 +10,29 @@
     />
     <link href="css/style.css" rel="stylesheet" />
 
-    <!-- Protección: redirigir al login si no hay sesión -->
+    <!-- redirigir al login si no hay sesión -->
     <script src="js/protectDashboard.js"></script>
   </head>
   <body class="bg-light">
     <div class="container mt-5">
       <div class="card shadow">
         <div class="card-header bg-primary text-white text-center">
-          <h2 class="mb-0">Bienvenido a DevOps Hub</h2>
+          <h2 class="mb-0">Welcome to DevOps Hub</h2>
         </div>
         <div class="card-body">
-          <p id="welcomeMessage">Cargando datos del usuario...</p>
+          <p id="welcomeMessage">Loading user data...</p>
           <div id="rolUsuario" class="mt-2 text-muted"></div>
           <hr />
 
           <!-- Formulario para crear proyecto -->
-          <h5>Crear nuevo proyecto</h5>
+          <h5>Create new project</h5>
           <form id="projectForm" class="mb-4">
             <div class="mb-3">
               <input
                 type="text"
                 class="form-control"
                 id="projectName"
-                placeholder="Nombre del proyecto"
+                placeholder="Project name"
                 required
               />
             </div>
@@ -40,28 +40,27 @@
               <textarea
                 class="form-control"
                 id="projectDescription"
-                placeholder="Descripción (opcional)"
+                placeholder="Description (optional)"
               ></textarea>
             </div>
             <button type="submit" class="btn btn-success">
-              Crear Proyecto
+              Create Project
             </button>
             <div id="projectAlert" class="mt-2"></div>
           </form>
 
-          <!-- Acciones de administrador -->
+          <!-- Admin actions -->
           <div id="adminActions" class="mt-4"></div>
-          
 
-          <!-- Lista de proyectos -->
-          <h5>Tus proyectos</h5>
+          <!-- Project list -->
+          <h5>Your Projects</h5>
           <ul id="projectList" class="list-group"></ul>
 
-          <button id="logoutBtn" class="btn btn-danger">Cerrar sesión</button>
+          <button id="logoutBtn" class="btn btn-danger">Log Out</button>
 
           <hr />
-          <h5>Repositorios públicos de GitHub</h5>
-          <button id="loadRepos" class="btn btn-dark mb-3">Cargar Repos</button>
+          <h5>Public GitHub Repositories</h5>
+          <button id="loadRepos" class="btn btn-dark mb-3">Load Repos</button>
           <ul id="repoList" class="list-group"></ul>
         </div>
       </div>

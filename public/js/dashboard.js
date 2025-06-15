@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProjects();
 
   //Mostrado de roles
-  verificarRol();
+  verifyRole();
 
   // Mostrar el nombre del usuario
   fetch("/auth/status", { credentials: "include" })
@@ -11,20 +11,20 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((data) => {
       document.getElementById(
         "welcomeMessage"
-      ).textContent = `Hola, ${data.username}! 👋`;
+      ).textContent = `Hello, ${data.username}! 👋`;
       if (data.role === "admin") {
         showAdminButton();
       }
     });
 
-  // Botón de logout
+  // Log out button
   document.getElementById("logoutBtn").addEventListener("click", () => {
     fetch("/auth/logout", { method: "GET", credentials: "include" }).then(
       () => (window.location.href = "login.html")
     );
   });
 
-  // Crear proyecto
+  // Create project
   const form = document.getElementById("projectForm");
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const alert = document.getElementById("projectAlert");
     if (res.ok) {
       alert.innerHTML =
-        '<div class="alert alert-success">Proyecto creado</div>';
+        '<div class="alert alert-success">Project created</div>';
       form.reset();
       loadProjects();
     } else {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Cargar proyectos
+  // Load projects
   function loadProjects() {
     fetch("/projects", { credentials: "include" })
       .then((res) => res.json())
@@ -61,35 +61,38 @@ document.addEventListener("DOMContentLoaded", () => {
         list.innerHTML = "";
         if (projects.length === 0) {
           list.innerHTML =
-            '<li class="list-group-item">No hay proyectos aún.</li>';
+            '<li class="list-group-item">No projects yet.</li>';
         } else {
           projects.forEach((p) => {
             const li = document.createElement("li");
             li.className = "list-group-item";
 
             // Formatear fecha
-            const fecha = new Date(p.created_at);
-            const dia = String(fecha.getDate()).padStart(2, "0");
-            const mes = String(fecha.getMonth() + 1).padStart(2, "0");
-            const anio = fecha.getFullYear();
-            const hora = String(fecha.getHours()).padStart(2, "0");
-            const minutos = String(fecha.getMinutes()).padStart(2, "0");
-            const fechaFormateada = `${dia}/${mes}/${anio} ${hora}:${minutos}`;
+            const date = new Date(p.created_at);
+            const day = String(date.getDate()).padStart(2, "0");
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const year = date.getFullYear();
+            const hour = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const formattedDate = `${day}/${month}/${year} ${hour}:${minutes}`;
 
             //Hora formateada
             li.innerHTML = `
             <strong>${p.name}</strong><br>
             <small>${p.description || ""}</small><br>
-            <em>${fechaFormateada}</em><br>
+            <em>${formattedDate}</em><br>
             <button class="btn btn-sm btn-primary mt-1" onclick="seeProjects(${
               p.id
-            })">Ver</button>
+            })">View</button>
             <button class="btn btn-sm btn-warning mt-1" onclick="editProjects(${
               p.id
-            })">Editar</button>
+            })">Edit</button>
             <button class="btn btn-sm btn-danger mt-1" onclick="deleteProjects(${
               p.id
-            })">Eliminar</button>
+            })">Delete</button>
+            <button class="btn btn-sm btn-info mt-1" onclick="viewTasks(${
+              p.id
+            })">Tasks</button>
           `;
             list.appendChild(li);
           });
@@ -98,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Función para verificar el rol del usuario
-  function verificarRol() {
+  function verifyRole() {
     fetch("/auth/status", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
@@ -108,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch((err) => {
-        console.error("No se pudo obtener el rol del usuario:", err);
+        console.error("Could not fetch user role:", err);
       });
   }
 
@@ -117,39 +120,39 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(`/projects/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        alert(`Proyecto: ${data.name}\nDescripción: ${data.description}`);
+        alert(`Project: ${data.name}\nDescription: ${data.description}`);
       })
-      .catch((err) => alert("Error al obtener proyecto"));
+      .catch((err) => alert("Error fetching project"));
   }
 
   // Función para editar
   function editProjects(id) {
-    const nuevoNombre = prompt("Nuevo nombre:");
-    const nuevaDescripcion = prompt("Nueva descripción:");
+    const newName = prompt("New name:");
+    const newDescription = prompt("New description:");
 
-    if (!nuevoNombre && !nuevaDescripcion) {
-      return alert("Debes introducir al menos un cambio.");
+    if (!newName && !newDescription) {
+      return alert("You must introduce at least one change.");
     }
 
     fetch(`/projects/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: nuevoNombre || undefined,
-        description: nuevaDescripcion || undefined,
+        name: newName || undefined,
+        description: newDescription || undefined,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        alert("Proyecto actualizado correctamente");
-        loadProjects(); // Recargar lista
+        alert("Project updated successfully");
+        loadProjects(); // Reload list
       })
-      .catch((err) => alert("Error al actualizar proyecto"));
+      .catch((err) => alert("Error updating project"));
   }
 
   // Función para eliminar
   function deleteProjects(id) {
-    if (!confirm("¿Estás seguro de que quieres eliminar este proyecto?"))
+    if (!confirm("¿Are you sure you want to delete this project?"))
       return;
 
     fetch(`/projects/${id}`, {
@@ -157,25 +160,29 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        alert("Proyecto eliminado");
-        loadProjects(); // Recargar lista
+        alert("Project deleted");
+        loadProjects(); // Reload list
       })
-      .catch((err) => alert("Error al eliminar proyecto"));
+      .catch((err) => alert("Error deleting project"));
   }
 
-  // Mostrar botón de gestión de usuarios si es admin
+  function viewTasks(projectId) {
+    window.location.href = `tasks.html?projectId=${projectId}`;
+  }
+
+  // Show user management button if admin
   function showAdminButton() {
-    const contenedor = document.getElementById("adminActions");
-    const boton = document.createElement("a");
+    const container = document.getElementById("adminActions");
+    const button = document.createElement("a");
 
-    boton.href = "handleUsers.html";
-    boton.className = "btn btn-outline-primary";
-    boton.textContent = "Gestionar usuarios";
+    button.href = "handleUsers.html";
+    button.className = "btn btn-outline-primary";
+    button.textContent = "Manage users";
 
-    contenedor.appendChild(boton);
+    container.appendChild(button);
   }
 
-  //Repositorio de GitHub
+  // GitHub Repositories
   document.getElementById("loadRepos").addEventListener("click", () => {
     fetch("/github/repos", { credentials: "include" })
       .then((res) => res.json())
@@ -184,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
         list.innerHTML = "";
         if (repos.length === 0) {
           list.innerHTML =
-            '<li class="list-group-item">No se encontraron repositorios.</li>';
+            '<li class="list-group-item">No repositories found.</li>';
         } else {
           repos.forEach((repo) => {
             const li = document.createElement("li");
@@ -193,19 +200,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     <a href="${repo.url}" target="_blank">
                       <strong>${repo.name}</strong>
                     </a><br>
-                    <small>${repo.description || "Sin descripción"}</small>`;
+                    <small>${repo.description || "No description"}</small>`;
             list.appendChild(li);
           });
         }
       });
   });
 
-  const infoRol = document.getElementById("rolUsuario");
-  infoRol.innerText = `Rol: ${data.role}`;
-
   // Cargar funciones en el DOM
   window.seeProjects = seeProjects;
   window.editProjects = editProjects;
   window.deleteProjects = deleteProjects;
+  window.viewTasks = viewTasks;
   window.showAdminButton = showAdminButton;
 });

@@ -106,7 +106,7 @@ router.patch("/:id/role", isAuthenticated, isAdmin, (req, res) => {
   const { role } = req.body;
 
   if (!["user", "admin"].includes(role)) {
-    return res.status(400).json({ error: "Rol inválido." });
+    return res.status(400).json({ error: "Role is invalid." });
   }
 
   const query = "UPDATE users SET role = ? WHERE id = ?";
@@ -114,12 +114,12 @@ router.patch("/:id/role", isAuthenticated, isAdmin, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error actualizando rol", details: err.message });
+        .json({ error: "Error updating role", details: err.message });
     }
     if (this.changes === 0) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+      return res.status(404).json({ error: "User not found" });
     }
-    res.json({ message: "Rol actualizado correctamente" });
+    res.json({ message: "Role updated successfully" });
   });
 });
 

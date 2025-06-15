@@ -9,6 +9,7 @@ const connectLivereload = require('connect-livereload');
 const path = require('path');
 const projectsRoute = require('./src/routes/project');
 const githubReposRoute = require('./src/routes/github/repos');
+const taskRoutes = require("./src/routes/tasks");
 
 const app = express();
 const port = 3000;
@@ -52,6 +53,9 @@ app.use('/projects', projectsRoute);
 
 // Ruta de repositorios de GitHub
 app.use('/github/repos', githubReposRoute);
+
+// Ruta de tareas
+app.use('/tasks', taskRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

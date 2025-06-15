@@ -18,12 +18,12 @@ form.addEventListener("submit", async (e) => {
   // Validaciones básicas (frontend)
   if (username.length < 3 || password.length < 4) {
     return showError(
-      "El nombre de usuario o la contraseña son demasiado cortos."
+      "Username and password must be at least 3 and 4 characters long."
     );
   }
 
   if (password !== confirmPassword) {
-    showError("Las contraseñas no coinciden.");
+    showError("Passwords do not match.");
     spinner.classList.add("d-none");
     registerBtn.disabled = false;
     return;
@@ -38,15 +38,15 @@ form.addEventListener("submit", async (e) => {
 
     if (!response.ok) {
       const result = await response.json();
-      throw new Error(result.error || "Error al registrar usuario.");
+      throw new Error(result.error || "Error registering user.");
     }
 
-    showSuccess("Usuario registrado correctamente. Redirigiendo a login...");
+    showSuccess("User registered successfully. Redirecting to login...");
     setTimeout(() => {
       window.location.href = "login.html";
     }, 2000);
   } catch (err) {
-    showError(err.message || "Error de conexión con el servidor.");
+    showError(err.message || "Error connecting to server.");
   }
 
   spinner.classList.add("d-none");
@@ -58,7 +58,7 @@ function showError(message) {
   alertContainer.innerHTML = `
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
       ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   `;
 }
@@ -68,7 +68,7 @@ function showSuccess(message) {
   alertContainer.innerHTML = `
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   `;
 }
