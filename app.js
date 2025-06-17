@@ -1,12 +1,9 @@
-const usersRoute = require('./src/routes/users');
-const loginRoute = require('./src/routes/auth/login');
-const initDB = require('./src/db/init');
 const express = require("express");
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
-const livereload = require('livereload');
-const connectLivereload = require('connect-livereload');
 const path = require('path');
+const usersRoute = require('./src/routes/users');
+const loginRoute = require('./src/routes/auth/login');
 const projectsRoute = require('./src/routes/project');
 const githubReposRoute = require('./src/routes/github/repos');
 const taskRoutes = require("./src/routes/tasks");
@@ -14,24 +11,14 @@ const taskRoutes = require("./src/routes/tasks");
 const app = express();
 const port = 3000;
 
-// Middleware para habilitar el live reload
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, "public"));
-app.use(connectLivereload());
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
-
-// 2. Servir archivos estáticos
+// Servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. Middleware para parseo de datos
+// Middleware de parseo
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 4. Middleware de sesiones
+// Middleware de sesión
 app.use(session({
   store: new SQLiteStore({
     db: 'sessions.sqlite',
@@ -44,17 +31,11 @@ app.use(session({
   maxAge: 3600000
 }));
 
-// 5. Rutas del backend
+// Rutas del backend
 app.use('/users', usersRoute);
 app.use('/auth', loginRoute);
-
-// Ruta de proyectos
 app.use('/projects', projectsRoute);
-
-// Ruta de repositorios de GitHub
 app.use('/github/repos', githubReposRoute);
-
-// Ruta de tareas
 app.use('/tasks', taskRoutes);
 
 app.listen(port, () => {

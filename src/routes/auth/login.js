@@ -62,21 +62,38 @@ router.get("/logout", isAuthenticated, (req, res) => {
 });
 
 // GET /auth/status - Verifica si hay sesión activa
+// GET /auth/status - Verifica si hay sesión activa y devuelve datos del usuario
 router.get("/status", (req, res) => {
   if (!req.session || !req.session.isLoggedIn) {
     return res.json({
       isLoggedIn: false,
-      message: "No active session"
+      message: "No active session",
     });
   }
 
-  res.json({
-    isLoggedIn: true,
-    userId: req.session.userId,
-    username: req.session.username,
-     role: req.session.role,
-    message: `Usuario ${req.session.username} autenticado`
-  });
-  });
+  const userId = req.session.userId;
+
+  db.get(
+    "SELECT github_username FROM users WHERE id = ?",
+    [userId],
+    (err, row) => {
+      if (err) {
+        console.error("Error retrieving GitHub username:", err);
+        return res
+          .status(500)
+          .json({ error: "Error retrieving GitHub username" });
+      }
+
+      res.json({
+        isLoggedIn: true,
+        userId: req.session.userId,
+        username: req.session.username,
+        role: req.session.role,
+        githubUsername: row?.github_username || "",
+        message: `Usuario ${req.session.username} autenticado`,
+      });
+    }
+  );
+});
 
 module.exports = router;

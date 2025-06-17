@@ -12,6 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById(
         "welcomeMessage"
       ).textContent = `Hello, ${data.username}! 👋`;
+
+      // Precargar GitHub username si existe
+      const githubInput = document.getElementById("githubUsername");
+      if (githubInput && data.githubUsername) {
+        githubInput.value = data.githubUsername;
+      }
+
       if (data.role === "admin") {
         showAdminButton();
       }

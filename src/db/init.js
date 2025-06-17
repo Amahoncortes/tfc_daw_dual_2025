@@ -32,3 +32,18 @@ db.serialize(() => {
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
     )`);
 });
+
+// Reiniciar contador AUTOINCREMENT de la tabla users si está vacía
+db.get("SELECT COUNT(*) AS count FROM users", (err, row) => {
+  if (err) {
+    console.error("Error comprobando usuarios:", err.message);
+  } else if (row.count === 0) {
+    db.run("DELETE FROM sqlite_sequence WHERE name = 'users'", (err2) => {
+      if (err2) {
+        console.error("Error reiniciando contador de users:", err2.message);
+      } else {
+        console.log("Contador de ID de users reiniciado (vacía)");
+      }
+    });
+  }
+});

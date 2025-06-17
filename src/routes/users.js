@@ -6,8 +6,11 @@ const { isAuthenticated } = require("../middleware/auth");
 const { canDeleteUser } = require("../middleware/users");
 const { isAdmin } = require("../middleware/auth");
 
+console.log("📦 Archivo users.js cargado");
+
 //Endpoint para crear un nuevo usuario con cifrado de contraseña
 router.post("/", async (req, res) => {
+   console.log("🟢 Entró en POST /users");
   const { username, password } = req.body;
   const normalizedUsername = username.toLowerCase();
   let role = "user";
@@ -20,8 +23,16 @@ router.post("/", async (req, res) => {
         .json({ error: "Error checking user count", details: err.message });
     }
 
+    console.log(
+      "👉 Número de usuarios actuales en la base de datos:",
+      row.count
+    );
+
     if (row.count === 0) {
-      role = "admin"; // Primer usuario se convierte en admin automáticamente
+      role = "admin";
+      console.log("🟢 Primer usuario, rol asignado:", role);
+    } else {
+      console.log("🔵 No es el primero, rol asignado:", role);
     }
 
     try {
@@ -53,43 +64,6 @@ router.post("/", async (req, res) => {
         .json({ error: "Error hashing the password", details: error.message });
     }
   });
-
-  if (!username || !password) {
-    return res.status(400).json({ error: "Username & password required." });
-  }
-
-  try {
-    //Cifrar contraseña con bcrypt (10 rondas de encriptado)
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const query =
-      "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
-    db.run(
-      query,
-      [normalizedUsername, hashedPassword, supremeRole],
-      function (err) {
-        if (err && err.message && err.message.includes("UNIQUE")) {
-          return res
-            .status(409)
-            .json({ error: "El nombre de usuario ya está en uso." });
-        }
-        if (err) {
-          return res
-            .status(500)
-            .json({ error: "Error al crear usuario", details: err.message });
-        }
-        res.status(201).json({
-          message: "Usuario creado exitosamente",
-          userId: this.lastID,
-        });
-      }
-    );
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ error: "Error hashing the password", details: error.message });
-  }
 });
 
 //Endpoint para listar usuarios
