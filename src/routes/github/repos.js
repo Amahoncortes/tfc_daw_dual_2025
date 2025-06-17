@@ -23,11 +23,7 @@ router.get("/", isAuthenticated, (req, res) => {
           `https://api.github.com/users/${row.github_username}/repos`
         );
 
-        console.log("GitHub API response status:", response.status);
-
         const text = await response.text();
-        console.log("Raw GitHub response:", text);
-
         const data = JSON.parse(text);
 
         if (!Array.isArray(data)) {

@@ -6,11 +6,8 @@ const { isAuthenticated } = require("../middleware/auth");
 const { canDeleteUser } = require("../middleware/users");
 const { isAdmin } = require("../middleware/auth");
 
-console.log("📦 Archivo users.js cargado");
-
 //Endpoint para crear un nuevo usuario con cifrado de contraseña
 router.post("/", async (req, res) => {
-   console.log("🟢 Entró en POST /users");
   const { username, password } = req.body;
   const normalizedUsername = username.toLowerCase();
   let role = "user";
