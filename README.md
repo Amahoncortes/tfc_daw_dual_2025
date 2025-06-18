@@ -1,4 +1,3 @@
-
 # 🚀 DevOps Hub
 
 **DevOps Hub** es una plataforma web gratuita y ligera diseñada para pequeños equipos de desarrollo, estudiantes y desarrolladores freelance que necesitan gestionar el ciclo de vida de sus proyectos sin recurrir a herramientas pesadas como Jira o Azure DevOps.
@@ -16,10 +15,43 @@ En el contexto actual del desarrollo de software, muchas herramientas profesiona
 Este proyecto se ha desarrollado siguiendo los objetivos definidos en el anteproyecto:
 
 - [x] **HU1**: Registro e inicio de sesión de usuarios.
+Se pretende demostrar que: un usuario puede registrar su cuenta y hacer login con la misma
+
+## 📺 Demostracion en vídeo
+- [HU1 - Registro e inicio de sesión](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.0-hu1)
+
 - [x] **HU2**: Creación de nuevos proyectos desde la plataforma.
+Se pretende demostrar que: 
+- Un usuario autenticado puede acceder al formulario de creación de proyecto.
+- El formulario permite introducir nombre y descripción del proyecto.
+- Que al enviarlo, el nuevo proyecto queda registrado correctamente en la base de datos.
+- Que se ve reflejado inmediatamente en el dashboard.
+- [HU2 - Crear nuevos proyectos](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.1-hu2)
+ 
 - [x] **HU3**: Visualización de los proyectos personales en el dashboard.
+Se pretende demostrar que:
+- Al iniciar sesión, el usuario accede a un dashboard o pantalla principal.
+- En dicho dashboard se muestra una lista de proyectos creados por ese usuario.
+- La visualización es clara y muestra nombre, descripción y cualquier otro dato relevante.
+- El nuevo proyecto creado en la HU2 también se muestra en esta vista.
+- [HU3 - Visualización de proyectos en el dashboard](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.2-hu3)
+
 - [x] **HU4**: Conexión con GitHub para mostrar repositorios públicos.
+Se pretende demostrar que:
+- El usuario puede introducir su nombre de usuario de GitHub en algún formulario, campo o input.
+- Al hacerlo, la app consulta la API pública de GitHub y muestra una lista de repositorios públicos.
+- Los repositorios mostrados corresponden al usuario introducido.
+- [HU4 - Visualización de repositorios de GitHub](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.3-hu4)
+
 - [x] **HU5**: Validación de datos y protección contra accesos no autorizados.
+Se pretende demostrar que:
+- El usuario intenta registrarse o loguearse con campos vacíos y no se le permite.
+- El usuario introduce datos inválidos (por ejemplo, muy cortos) y recibe mensaje de error
+- Se han usado consultas parametrizadas para prevenir inyecciones SQL (mostrar en el código, por ejemplo en auth.js para el autenticado de usuario.)
+- El usuario no puede acceder al dashboard sin estar logueado (devops-hub/public/js/protectDashboard.js)
+- Si accede manualmente por URL sin sesión, es redirigido o bloqueado
+- El backend verifica que haya sesión activa antes de responder a rutas sensibles
+- [HU5 - Seguridad y validaciones](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.4-hu5)
 
 ---
 
@@ -44,13 +76,13 @@ Este proyecto se ha desarrollado siguiendo los objetivos definidos en el antepro
 
 ## 🛠 Tecnologías utilizadas
 
-| Capa               | Tecnología           |
-|--------------------|----------------------|
-| Presentación       | HTML, CSS, JavaScript, Bootstrap |
-| Lógica de negocio  | Node.js, Express.js  |
-| Persistencia       | SQLite (en local) / PostgreSQL (producción recomendado) |
-| Control de versiones | Git, GitHub |
-| API externa        | GitHub REST API v3   |
+| Capa                 | Tecnología                                              |
+| -------------------- | ------------------------------------------------------- |
+| Presentación         | HTML, CSS, JavaScript, Bootstrap                        |
+| Lógica de negocio    | Node.js, Express.js                                     |
+| Persistencia         | SQLite (en local) / PostgreSQL (producción recomendado) |
+| Control de versiones | Git, GitHub                                             |
+| API externa          | GitHub REST API v3                                      |
 
 ---
 
@@ -79,6 +111,7 @@ Autenticar a un usuario con credenciales.
 ```
 
 **Errores comunes:**
+
 - 400: Campos vacíos
 - 401: Credenciales incorrectas
 
@@ -190,6 +223,7 @@ El sistema sigue una arquitectura en tres capas (presentación, lógica de negoc
 - Control de sesión básica con cookies
 
 ---
+
 ## 🔄 Mejoras respecto al anteproyecto
 
 Aunque este proyecto se ha basado en una planificación previa recogida en el anteproyecto definitivo, durante el desarrollo real surgieron nuevas ideas y necesidades que me llevaron a implementar algunas funcionalidades extra no contempladas inicialmente. Estas mejoras reflejan un proceso iterativo auténtico, donde fui adaptando y ampliando el alcance según la evolución del trabajo.
@@ -209,8 +243,8 @@ Aunque este proyecto se ha basado en una planificación previa recogida en el an
 - **Documentación de la API:** incluí un ejemplo de documentación de endpoints en el README y tengo la intención de extenderlo más adelante si amplío el sistema.
 
 - **Imagen de arquitectura técnica:** elaboré un diagrama visual de las tres capas (frontend, lógica, datos) para acompañar la defensa y explicar mejor cómo está estructurado todo.
----
 
+---
 
 ## 📎 Documentación adicional
 

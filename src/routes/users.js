@@ -87,7 +87,7 @@ router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
   }
 
   //Verificar que el usuario existe ante de eliminarlo
-  db.get("SELECT * FROM users WHERE id = ?", [userId], (err, user) => {
+  db.get("SELECT * FROM users WHERE id = ?", [userId], (err, user) => { //Consulta parametrizada para evitar inyección SQL
     if (err) {
       return res
         .status(500)
