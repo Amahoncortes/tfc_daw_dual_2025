@@ -21,16 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("No se pudo cargar el estado de sesión:", err);
     });
 
-  // Cerrar sesión
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      fetch("/auth/logout", { method: "GET", credentials: "include" }).then(() => {
-        window.location.href = "login.html";
-      });
-    });
-  }
-
   // Exponer función global solo si aplica
   window.showAdminButton = showAdminButton;
 });

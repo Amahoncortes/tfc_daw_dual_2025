@@ -80,14 +80,22 @@ router.get("/", isAuthenticated, (req, res) => {
 //Endpoint para eliminar un usuario
 router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
   const userId = parseInt(req.params.id);
+  const currentUserId = req.session.userId;
 
-  //Verificar que el ID del usuario sea un número válido
+  // Validar que el ID es válido
   if (isNaN(userId)) {
     return res.status(400).json({ error: "ID de usuario inválido." });
   }
 
-  //Verificar que el usuario existe ante de eliminarlo
-  db.get("SELECT * FROM users WHERE id = ?", [userId], (err, user) => { //Consulta parametrizada para evitar inyección SQL
+  // Impedir eliminarse a uno mismo
+  if (userId === currentUserId) {
+    return res
+      .status(403)
+      .json({ error: "No puedes eliminar tu propio usuario." });
+  }
+
+  // Buscar usuario
+  db.get("SELECT * FROM users WHERE id = ?", [userId], (err, user) => {
     if (err) {
       return res
         .status(500)
@@ -98,16 +106,15 @@ router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    //Eliminar el usuario
+    // Eliminar usuario
     db.run("DELETE FROM users WHERE id = ?", [userId], function (err) {
       if (err) {
         return res
           .status(500)
           .json({ error: "Error eliminando usuario", details: err.message });
       }
-      res
-        .status(200)
-        .json({ message: "Usuario eliminado con éxito", userId: userId });
+
+      res.status(200).json({ message: "Usuario eliminado con éxito", userId });
     });
   });
 });
@@ -141,7 +148,9 @@ router.put("/github", isAuthenticated, async (req, res) => {
   const { githubUsername } = req.body;
 
   if (!githubUsername || typeof githubUsername !== "string") {
-    return res.status(400).json({ error: "Se requiere el nombre de usuario de GitHub." });
+    return res
+      .status(400)
+      .json({ error: "Se requiere el nombre de usuario de GitHub." });
   }
 
   db.run(
@@ -150,12 +159,14 @@ router.put("/github", isAuthenticated, async (req, res) => {
     function (err) {
       if (err) {
         console.error("DB error:", err);
-        return res
-          .status(500)
-          .json({ error: "Error actualizando el nombre de usuario de GitHub." });
+        return res.status(500).json({
+          error: "Error actualizando el nombre de usuario de GitHub.",
+        });
       }
 
-      res.json({ message: "Nombre de usuario de GitHub actualizado con éxito." });
+      res.json({
+        message: "Nombre de usuario de GitHub actualizado con éxito.",
+      });
     }
   );
 });

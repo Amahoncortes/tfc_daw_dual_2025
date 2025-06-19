@@ -1,13 +1,14 @@
 let currentUserId = null;
+let currentUserRole = null; // 👈 nuevo
 
-// Proteger acceso: solo admins
 fetch("/auth/status")
   .then((res) => res.json())
   .then((data) => {
     if (!data.isLoggedIn || data.role !== "admin") {
       window.location.href = "login.html";
     } else {
-      currentUserId = data.userId; // guardar ID actual
+      currentUserId = data.userId;
+      currentUserRole = data.role; // 👈 guardar rol
       loadUsers();
     }
   })
@@ -38,8 +39,16 @@ function loadUsers() {
 
         const badge =
           user.role === "admin"
-            ? `<span class="badge ${isCurrent ? "bg-warning text-dark" : "bg-danger"} ms-2"><i class="bi bi-shield-lock-fill"></i> ${user.role}${isCurrent ? " (tú)" : ""}</span>`
-            : `<span class="badge ${isCurrent ? "bg-info text-dark" : "bg-secondary"} ms-2"><i class="bi bi-person-fill"></i> ${user.role}${isCurrent ? " (tú)" : ""}</span>`;
+            ? `<span class="badge ${
+                isCurrent ? "bg-warning text-dark" : "bg-danger"
+              } ms-2"><i class="bi bi-shield-lock-fill"></i> ${user.role}${
+                isCurrent ? " (tú)" : ""
+              }</span>`
+            : `<span class="badge ${
+                isCurrent ? "bg-info text-dark" : "bg-secondary"
+              } ms-2"><i class="bi bi-person-fill"></i> ${user.role}${
+                isCurrent ? " (tú)" : ""
+              }</span>`;
 
         const newRole = user.role === "admin" ? "user" : "admin";
         const icon =
@@ -47,17 +56,24 @@ function loadUsers() {
             ? `<i class="bi bi-shield-lock-fill me-1"></i>`
             : `<i class="bi bi-person-fill me-1"></i>`;
 
-        const changeRoleBtn = `
-          <button class="btn btn-sm btn-outline-primary me-2" onclick="updateRole(${user.id}, '${newRole}')" ${isCurrent ? "disabled" : ""}>
-            ${icon}Cambiar a ${newRole}
-          </button>
-        `;
+        let changeRoleBtn = "";
+        if (
+          !isCurrent &&
+          !(user.role === "admin" && currentUserRole === "admin")
+        ) {
+          changeRoleBtn = `
+    <button class="btn btn-sm btn-outline-primary me-2" onclick="updateRole(${user.id}, '${newRole}')">
+      ${icon}Cambiar a ${newRole}
+    </button>`;
+        }
 
-        const deleteBtn = isCurrent
-          ? `<span class="text-muted small">No se puede eliminar</span>`
-          : `<button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id}, '${user.username}')">
-              <i class="bi bi-trash"></i> Eliminar
-            </button>`;
+        let deleteBtn = `<span class="text-muted small">No se puede eliminar</span>`;
+        if (!isCurrent && currentUserRole === "admin") {
+          deleteBtn = `
+    <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id}, '${user.username}')">
+      <i class="bi bi-trash"></i> Eliminar
+    </button>`;
+        }
 
         li.innerHTML = `
           <div>
@@ -94,7 +110,10 @@ function updateRole(id, newRole) {
 }
 
 function deleteUser(id, username) {
-  if (!confirm(`¿Estás seguro de que deseas eliminar al usuario "${username}"?`)) return;
+  if (
+    !confirm(`¿Estás seguro de que deseas eliminar al usuario "${username}"?`)
+  )
+    return;
 
   fetch(`/users/${id}`, {
     method: "DELETE",

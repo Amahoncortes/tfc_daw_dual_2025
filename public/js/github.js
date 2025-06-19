@@ -9,16 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  // Logout
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      fetch("/auth/logout", { method: "GET", credentials: "include" }).then(() => {
-        window.location.href = "login.html";
-      });
-    });
-  }
-
   // Cargar repos
   const loadReposBtn = document.getElementById("loadRepos");
   if (loadReposBtn) {

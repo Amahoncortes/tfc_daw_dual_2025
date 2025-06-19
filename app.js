@@ -26,9 +26,13 @@ app.use(session({
   }),
   secret: 'devops_hub_secret_key',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false },
-  maxAge: 3600000
+  saveUninitialized: false, 
+  cookie: {
+    secure: false,
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 3600000 // 1 hora
+  }
 }));
 
 // Rutas del backend

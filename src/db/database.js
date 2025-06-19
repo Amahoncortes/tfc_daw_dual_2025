@@ -11,3 +11,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
 });
 
 module.exports = db;
+
+// 🔧 Ejecutar script de inicialización (crear tablas)
+require('./init');

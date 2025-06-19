@@ -45,7 +45,7 @@ router.post("/login", (req, res) => {
 });
 
 // GET /auth/logout - Cerrar sesión
-router.get("/logout", isAuthenticated, (req, res) => {
+router.post("/logout", isAuthenticated, (req, res) => {
   if (req.session && req.session.username) {
     req.session.destroy((err) => {
       if (err) {
