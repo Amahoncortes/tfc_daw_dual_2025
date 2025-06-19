@@ -12,85 +12,122 @@ En el contexto actual del desarrollo de software, muchas herramientas profesiona
 
 ## 🎯 Objetivos y funcionalidades previstas
 
-Este proyecto se ha desarrollado siguiendo los objetivos definidos en el anteproyecto:
+Este proyecto se ha desarrollado siguiendo los objetivos definidos en el anteproyecto, organizados como historias de usuario (HU). Todas han sido implementadas y validadas mediante demostraciones funcionales en vídeo.
 
-- [x] **HU1**: Registro e inicio de sesión de usuarios.
-Se pretende demostrar que: un usuario puede registrar su cuenta y hacer login con la misma
+---
 
-## 📺 Demostracion en vídeo
+## 📺 Demostración en vídeo por historia de usuario
+
+### ✅ **HU1: Registro e inicio de sesión de usuarios**
+
+Se pretende demostrar que:
+
+- Un usuario puede registrar su cuenta.
+- Puede iniciar sesión con sus credenciales.
+- El diseño del login es moderno y funcional, incluyendo validación visual, spinner de carga, gestión de errores, y un layout profesional.
+- Se protege el acceso mediante control de sesión.
 - [HU1 - Registro e inicio de sesión](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.0-hu1)
 
-- [x] **HU2**: Creación de nuevos proyectos desde la plataforma.
-Se pretende demostrar que: 
+---
+
+### ✅ **HU2: Creación de nuevos proyectos**
+
+Se pretende demostrar que:
+
 - Un usuario autenticado puede acceder al formulario de creación de proyecto.
 - El formulario permite introducir nombre y descripción del proyecto.
-- Que al enviarlo, el nuevo proyecto queda registrado correctamente en la base de datos.
-- Que se ve reflejado inmediatamente en el dashboard.
+- El proyecto se guarda correctamente en la base de datos.
+- Se refleja automáticamente en el dashboard del usuario.
 - [HU2 - Crear nuevos proyectos](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.1-hu2)
- 
-- [x] **HU3**: Visualización de los proyectos personales en el dashboard.
+
+---
+
+### ✅ **HU3: Visualización de proyectos en el dashboard**
+
 Se pretende demostrar que:
-- Al iniciar sesión, el usuario accede a un dashboard o pantalla principal.
-- En dicho dashboard se muestra una lista de proyectos creados por ese usuario.
-- La visualización es clara y muestra nombre, descripción y cualquier otro dato relevante.
-- El nuevo proyecto creado en la HU2 también se muestra en esta vista.
+
+- Tras iniciar sesión, el usuario accede a una vista principal (dashboard).
+- Se muestra una lista de proyectos creados por ese usuario.
+- La visualización es clara y muestra nombre, descripción y otros datos.
 - [HU3 - Visualización de proyectos en el dashboard](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.2-hu3)
 
-- [x] **HU4**: Conexión con GitHub para mostrar repositorios públicos.
+---
+
+### ✅ **HU4: Conexión con GitHub para mostrar repos públicos**
+
 Se pretende demostrar que:
-- El usuario puede introducir su nombre de usuario de GitHub en algún formulario, campo o input.
-- Al hacerlo, la app consulta la API pública de GitHub y muestra una lista de repositorios públicos.
-- Los repositorios mostrados corresponden al usuario introducido.
+
+- El usuario puede introducir su nombre de usuario de GitHub.
+- La app consulta la API pública de GitHub.
+- Se muestra una lista con los repositorios públicos asociados.
 - [HU4 - Visualización de repositorios de GitHub](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.3-hu4)
 
-- [x] **HU5**: Validación de datos y protección contra accesos no autorizados.
+---
+
+### ✅ **HU5: Seguridad, validaciones y control de acceso**
+
 Se pretende demostrar que:
-- El usuario intenta registrarse o loguearse con campos vacíos y no se le permite.
-- El usuario introduce datos inválidos (por ejemplo, muy cortos) y recibe mensaje de error
-- Se han usado consultas parametrizadas para prevenir inyecciones SQL (mostrar en el código, por ejemplo en auth.js para el autenticado de usuario.)
-- El usuario no puede acceder al dashboard sin estar logueado (devops-hub/public/js/protectDashboard.js)
-- Si accede manualmente por URL sin sesión, es redirigido o bloqueado
-- El backend verifica que haya sesión activa antes de responder a rutas sensibles
+
+- No se permite registro/login con campos vacíos o inválidos.
+- Se muestra feedback visual claro ante errores de validación.
+- Se usan consultas parametrizadas para evitar inyecciones SQL.
+- Rutas sensibles están protegidas por control de sesión (`protectDashboard.js`).
+- El backend bloquea accesos no autorizados.
 - [HU5 - Seguridad y validaciones](https://github.com/Amahoncortes/tfc_daw_dual_2025/releases/tag/v1.4-hu5)
 
 ---
 
 ## 🧠 Decisiones de diseño
 
-- **Node.js + Express**: Ligero y eficiente para construir APIs REST.
-- **SQLite**: Permite desarrollo local sin necesidad de configurar un servidor.
-- **Bootstrap**: Acelera la maquetación con diseño responsive.
-- **API GitHub**: Permite integración externa sin necesidad de OAuth.
+- **Node.js + Express**: Elegí esta combinación porque es ligera, fácil de entender y permite crear una API REST de forma muy rápida. Me resultó sencilla para estructurar el backend por módulos (rutas, middleware y base de datos).
+
+- **SQLite**: Me pareció la opción más cómoda para trabajar en local sin tener que configurar nada. Es suficiente para este tipo de proyecto y me permitió guardar usuarios, proyectos y tareas de forma persistente.
+
+- **express-session + connect-sqlite3**: Usé este sistema de sesiones para que se guardaran en disco en lugar de solo en memoria, así no se perdían al reiniciar el servidor. Esto fue clave para proteger bien el acceso al dashboard y mantener el login.
+
+- **Bootstrap 5**: Lo utilicé para maquetar más rápido y asegurarme de que todo fuera responsive. Luego lo combiné con CSS personalizado para que el diseño se viera más profesional y no tan básico.
+
+- **Diseño visual con curva y colores personalizados**: Cambié el diseño del login para hacerlo más moderno, usando una curva SVG y degradados azulados. Esto le da un aspecto más cuidado y profesional desde el primer momento.
+
+- **GitHub API sin autenticación**: Decidí mostrar los repositorios públicos usando solo el nombre de usuario, sin complicaciones de OAuth. Para evitar errores de CORS, hice la petición desde el backend.
 
 ---
 
 ## 🧩 Funcionalidades principales
 
-- Registro e inicio de sesión de usuarios
-- Creación y visualización de proyectos personales
-- Conexión con GitHub para listar repositorios públicos
-- Almacenamiento de datos en base de datos local (SQLite)
-- Validación de formularios y consultas parametrizadas para seguridad
+- Registro e inicio de sesión de usuarios con validaciones y feedback visual.
+- Rediseño completo del login con layout moderno, curva SVG y spinner de carga.
+- Creación, visualización y eliminación de proyectos personales.
+- Gestión de tareas: crear, listar y eliminar tareas asociadas.
+- Visualización de repositorios públicos de GitHub introduciendo el nombre de usuario.
+- Página de administración de usuarios (accesible según el rol).
+- Control de sesión persistente con protección de rutas mediante middleware.
+- Almacenamiento de datos con SQLite (usuarios, proyectos, tareas y sesiones).
+- Validación de formularios y uso de consultas SQL parametrizadas para mayor seguridad.
 
 ---
 
 ## 🛠 Tecnologías utilizadas
 
-| Capa                 | Tecnología                                              |
-| -------------------- | ------------------------------------------------------- |
-| Presentación         | HTML, CSS, JavaScript, Bootstrap                        |
-| Lógica de negocio    | Node.js, Express.js                                     |
-| Persistencia         | SQLite (en local) / PostgreSQL (producción recomendado) |
-| Control de versiones | Git, GitHub                                             |
-| API externa          | GitHub REST API v3                                      |
+| Capa                 | Tecnología                                                               |
+| -------------------- | ------------------------------------------------------------------------ |
+| Presentación         | HTML, CSS personalizado, Bootstrap 5, JavaScript                         |
+| Lógica de negocio    | Node.js, Express.js, express-session, connect-sqlite3                    |
+| Persistencia         | SQLite (base de datos local para usuarios, proyectos, tareas y sesiones) |
+| Control de versiones | Git, GitHub                                                              |
+| API externa          | GitHub REST API v3 (repos públicos sin autenticación)                    |
 
 ---
 
 ## 🔌 API REST (ejemplo de endpoint)
 
-### `POST /login`
+A continuación, se muestra un ejemplo representativo del funcionamiento de la API backend. El resto de endpoints están organizados por rutas en `src/routes/`.
 
-Autenticar a un usuario con credenciales.
+---
+
+### `POST /auth/login`
+
+Autenticar a un usuario con sus credenciales. Este endpoint también inicia una sesión persistente mediante cookies.
 
 **Parámetros (body JSON):**
 
@@ -102,20 +139,16 @@ Autenticar a un usuario con credenciales.
 ```
 
 **Respuesta exitosa:**
-
-```json
 {
-  "message": "Login successful",
-  "userId": 1
+"message": "Login successful",
+"userId": 1,
+"role": "user"
 }
-```
 
-**Errores comunes:**
-
-- 400: Campos vacíos
-- 401: Credenciales incorrectas
-
----
+**Errores comunes**
+400 Bad Request: Campos vacíos o mal formateados.
+401 Unauthorized: Credenciales incorrectas.
+500 Internal Server Error: Fallo en la base de datos o estructura del backend.
 
 ## 🧪 Instrucciones para levantar el proyecto en local
 
@@ -169,58 +202,63 @@ El sistema sigue una arquitectura en tres capas (presentación, lógica de negoc
 ├── app.js
 ├── package.json
 ├── package-lock.json
-├── .env                # (no incluido en el repo)
 ├── README.md
+├── .env # (no incluido en el repo)
+
 ├── public/
-│   ├── index.html
-│   ├── dashboard.html
-│   ├── login.html
-│   ├── register.html
-│   ├── tasks.html
-│   ├── handleUsers.html
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       ├── auth.js
-│       ├── checkSession.js
-│       ├── dashboard.js
-│       ├── handleUsers.js
-│       ├── protectDashboard.js
-│       ├── register.js
-│       └── tasks.js
+│ ├── index.html # Página de bienvenida
+│ ├── login.html # Pantalla de login (diseño moderno con curva SVG)
+│ ├── register.html # Formulario de registro
+│ ├── dashboard.html # Vista principal con proyectos y GitHub
+│ ├── tasks.html # Gestión de tareas
+│ ├── handleUsers.html # Gestión de usuarios (solo admins)
+│ ├── css/
+│ │ └── style.css # Estilos personalizados (combinado con Bootstrap 5)
+│ └── js/
+│ ├── auth.js
+│ ├── checkSession.js
+│ ├── dashboard.js
+│ ├── handleUsers.js
+│ ├── protectDashboard.js
+│ ├── register.js
+│ └── tasks.js
+
 ├── src/
-│   ├── db/
-│   │   ├── database.js
-│   │   ├── database.sqlite
-│   │   ├── sessions.sqlite
-│   │   └── init.js
-│   ├── middleware/
-│   │   ├── auth.js
-│   │   └── users.js
-│   └── routes/
-│       ├── auth/
-│       │   └── login.js
-│       ├── github/
-│       │   └── repos.js
-│       ├── project.js
-│       ├── tasks.js
-│       └── users.js
+│ ├── db/
+│ │ ├── database.js # Conexión y queries a la BBDD
+│ │ ├── database.sqlite # Base de datos de usuarios, proyectos y tareas
+│ │ ├── sessions.sqlite # Base de datos separada para sesiones
+│ │ └── init.js # Script de inicialización de tablas
+│ ├── middleware/
+│ │ ├── auth.js # Middlewares de sesión, roles y acceso
+│ │ └── users.js # Middleware para validar usuarios
+│ └── routes/
+│ ├── auth/
+│ │ ├── login.js # Endpoint de login (POST)
+│ │ └── register.js # Endpoint de registro (POST)
+│ ├── github/
+│ │ └── repos.js # Consulta de repos públicos desde GitHub
+│ ├── project.js # CRUD de proyectos
+│ ├── tasks.js # CRUD de tareas
+│ └── users.js # Consultas de usuarios y GitHub username
+
 ├── docs/
-│   └── Anteproyecto/
-│       ├── arquitectura.png
-│       └── Versión_definitiva_anteproyecto.pdf
-│
-├── .env (no incluido en el repo)
-└── README.md
+│ └── Anteproyecto/
+│ ├── arquitectura.png
+│ └── Versión_definitiva_anteproyecto.pdf
 ```
 
 ---
 
 ## 🔐 Seguridad aplicada
 
-- Validación de formularios en cliente y servidor
-- Consultas SQL parametrizadas para evitar inyecciones
-- Control de sesión básica con cookies
+- **Validación de formularios** tanto en cliente como en servidor para prevenir envíos incompletos o maliciosos.
+- **Consultas SQL parametrizadas** en todos los endpoints críticos para evitar inyecciones SQL.
+- **Control de sesión persistente** usando `express-session` y `connect-sqlite3`, lo que garantiza que el usuario permanece autenticado tras el login incluso al recargar o cambiar de ruta.
+- **Protección de rutas sensibles** mediante middlewares (`isAuthenticated`, `preventLoginIfAuthenticated`, `isAdmin`) que impiden el acceso a vistas como el dashboard, gestión de usuarios o tareas si no hay sesión activa.
+- **Redirección automática**: Si un usuario intenta acceder al login estando ya logueado, se le redirige al dashboard automáticamente, y viceversa.
+- **Mensajes de error controlados**: Se devuelve feedback claro al usuario en caso de errores de autenticación o acceso denegado.
+- **Roles de usuario (user/admin)** para limitar la gestión de usuarios a administradores únicamente.
 
 ---
 
@@ -246,41 +284,49 @@ Aunque este proyecto se ha basado en una planificación previa recogida en el an
 
 ---
 
-## ✅ Justificación de objetivos alcanzados
+# ✅ Justificación de objetivos alcanzados
 
-Las cinco historias de usuario comprometidas en el anteproyecto han sido desarrolladas e implementadas correctamente. Todas ellas están demostradas en los vídeos enlazados en este README. Además, el proyecto ha evolucionado con mejoras adicionales que no estaban previstas inicialmente pero que enriquecen su funcionalidad.
+Las cinco historias de usuario comprometidas en el anteproyecto han sido desarrolladas e implementadas correctamente. Todas ellas están documentadas y demostradas en los vídeos enlazados a lo largo de este README.
 
-No queda ningún objetivo sin cumplir.
+Además, el proyecto ha evolucionado con numerosas mejoras adicionales que no estaban contempladas inicialmente, como el rediseño moderno del login, la gestión visual de usuarios, el CRUD completo de tareas o la modularización del backend. Estas ampliaciones han enriquecido significativamente la funcionalidad y la experiencia de usuario de la aplicación, respetando al mismo tiempo los principios de simplicidad y ligereza planteados desde el inicio.
+
+> No queda ningún objetivo pendiente de cumplir, y se ha superado el alcance inicial en varios aspectos.
+
+---
 
 ## 📎 Documentación adicional
 
-- [Anteproyecto completo (PDF)](docs/Anteproyecto/Versión_definitiva_anteproyecto.pdf)
+- 📄 [Anteproyecto completo (PDF)](docs/Anteproyecto/Versión_definitiva_anteproyecto.pdf)
 
-- ### 📦 Diagrama de componentes
-[Diagrama de componentes](docs/Anteproyecto/Diagramas/diagrama_componentes.png)
-
----
+- 📦 [Diagrama de componentes](docs/Anteproyecto/Diagramas/diagrama_componentes.png)
 
 ---
 
 ## 🔄 Metodología de desarrollo y flujo de trabajo en GitHub (sin invents)
 
-Durante el desarrollo de este proyecto no seguí ninguna metodología formal, dado que no conozco prácticamente ninguna lo suficiente todavía. Además, trabajé de forma completamente individual. Sin embargo, sí que traté de organizarme siguiendo un enfoque iterativo e incremental, tal como proponía el ejemplo de anteproyecto enviado por nuestro tutor, por el cual me guié a la hora de hacer este desarrollo.
+Durante el desarrollo de este proyecto no seguí ninguna metodología formal como Scrum o Kanban, ya que no las domino aún lo suficiente. Además, trabajé de forma completamente individual. Sin embargo, intenté organizarme siguiendo un enfoque **iterativo e incremental**, tal como recomendaba el ejemplo de anteproyecto proporcionado por el tutor, que me sirvió como principal guía.
 
 Mi flujo de trabajo en GitHub fue el siguiente:
 
-- Creé una rama `main` que sirvió como rama principal para almacenar el código que iba funcionando de forma estable.
-- A medida que iba creando funcionalidades para el proyecto, las he subido cada una en una rama feature/ específica para cada característica en un intento de organizarme. También he tenido que arreglar algunos errores en ramas bugfix/ , como cuando por equivocación hice que la aplicación me obligase a tener la sesión
-iniciada para poder acceder a la página de inicio de sesión.
-- Dichas ramas, incluida, como es lógico, main, contienen numerosso commits con mensajes descriptivos que reflejan bien cada cambio (por ejemplo: `feat: integración con GitHub`, `fix: validación de formulario de login`, `docs: actualizar README con mejoras`). como punto a mejorar, a veces he hecho commits con tantos cambios sin darme cuenta que era imposible hacer un commit lo suficientemente específico y he recurrido a generalizaciones, lo cual no está del todo bien.
-- Fui subiendo cambios conforme terminaba cada historia de usuario.
-- Usé los *GitHub Releases* para organizar y adjuntar las demostraciones en vídeo, uno por cada historia de usuario completada.
+- Creé una rama `main` como rama estable principal donde solo subía código funcional.
+- Para cada funcionalidad nueva, creaba una rama `feature/` específica. También utilicé ramas `bugfix/` para corregir errores surgidos durante el desarrollo. Por ejemplo, una de ellas arreglaba un fallo que provocaba que no se pudiera acceder al login si no tenías sesión.
+- Cada rama contiene commits con mensajes descriptivos (por ejemplo: `feat: integración con GitHub`, `fix: validación de login`, `docs: actualizar README`). Aunque a veces, por error, agrupé demasiados cambios en un único commit, intenté mantener una trazabilidad razonable.
+- Subía los cambios al finalizar cada historia de usuario para mantener el progreso ordenado.
+- Utilicé **GitHub Releases** para empaquetar y documentar cada entrega, incluyendo un vídeo demostrativo por cada historia completada.
 
-En resumen, aunque el desarrollo fue individual, traté de mantener un control de versiones limpio, documentado y relacionado directamente con las funcionalidades implementadas.
+> En resumen: aunque fui autodidacta y el desarrollo fue completamente individual, mantuve un control de versiones ordenado, documentado y ligado directamente a los objetivos definidos.
 
-## 🔄 Diagramas de Gantt inicial (estimación de tiempos) y final (tiempos reales basados en commits del repositorio de GitHub)
-[Diagrama de Gantt_inicial](docs/Anteproyecto/Diagramas/Diagrama_Gantt_inicial.jpg)
-[Diagrama de Gantt_final](docs/Anteproyecto/Diagramas/Diagrama%20de%20Gantt_final.png)
+## 🔄 Diagramas de Gantt: estimación vs. tiempo real
+
+A continuación se muestran los dos diagramas de Gantt que resumen la planificación temporal del proyecto frente a su ejecución real:
+
+- 📅 **Gantt inicial (estimación de tiempos del anteproyecto)**  
+  Representa la planificación prevista al comienzo del proyecto.  
+  ![Diagrama de Gantt inicial](docs/Anteproyecto/Diagramas/Diagrama_Gantt_inicial.jpg)
+
+- ⏱️ **Gantt final (basado en commits y entregas reales)**  
+  Muestra los tiempos reales invertidos durante el desarrollo, recopilados a partir del histórico de commits y tareas en Clockify.  
+  ![Diagrama de Gantt final](docs/Anteproyecto/Diagramas/Diagrama%20de%20Gantt_final.png)
 
 ## 📊 Justificación de las diferencias en las estimaciones
 
@@ -290,75 +336,80 @@ A continuación, hago una explicación de las diferencias por fases y tareas:
 
 ### ✅ Coincidencias destacables
 
-- La **fase de inicio** la cumplí ajustada al plan: entre el 18 y 19 de mayo definí el MVP, analicé los requisitos necesarios para el proyecto, y organicé la estructura inicial del proyecto en Express con SQLite.
-- La **fase de transición**, centrada en las pruebas y documentación final, también la hice según lo previsto: los vídeos y el README final se prepararon del 15 al 18 de junio.
+- La **fase de inicio** se desarrolló según lo planificado: entre el 18 y 19 de mayo definí el MVP, analicé los requisitos funcionales, diseñé la estructura inicial del proyecto y preparé la base técnica con Express y SQLite.
+
+- La **fase de transición**, dedicada a pruebas finales, revisión de funcionalidades, grabación de vídeos y redacción del README, también se ejecutó conforme al cronograma previsto: del 15 al 18 de junio.
 
 ### ⚠️ Desviaciones y causas detalladas
 
-#### 🟧 Fase de construcción – Iteración 2 (Gestión de proyectos) 
+#### 🟧 Iteración 2 – Gestión de proyectos (Planificada para 1 semana, llevó casi 3)
 
-**Planificada para una semana, me llevó casi tres.** Las razones son las siguientes:
+**Principales causas de desviación:**
 
-- **Problemas de sesiones:** Al principio del desarrollo, las rutas protegidas como el dashboard redirigían incluso a usuarios ya logueados, permitiendo cosas
-como que un usuario pudiera hacer doble login (es decir, al darle al iniciar sesión, el usuario se autenticaba y registraba el inicio de sesión, pero luego me permitía volver a intentarlo en lugar de redirigirme al dashboard). Esto ocurría porque no me estaba guardando bien las sesiones de usuario en sqlite. Tuve que modificar `isAuthenticated` en `src/middleware/auth.js` y crear middlewares específicos para proteger y evitar dobles login o logouts. Esto implicó rediseñar parte del control de sesión, e introducir `express-session` junto con `connect-sqlite3` para que empezasen a persistirse las sesiones. (commits 19-20 de mayo).
+- **Problemas con las sesiones**  
+  Las rutas protegidas como el dashboard redirigían incluso a usuarios logueados, permitiendo dobles login. El problema residía en la mala persistencia de sesiones. Implementé `express-session` y `connect-sqlite3`, y rediseñé middlewares como `isAuthenticated`, `preventLoginIfAuthenticated` y `isAdmin`.
 
-- **Estado inconsistente entre frontend y backend:** al modificar datos del proyecto, en algunas ocasiones se reflejaban incorrectamente en la vista. Descubrí que estaba accediendo al DOM antes de que el `fetch` devolviera la respuesta, lo que me obligó a introducir `async/await` y redibujar dinámicamente las listas con `innerHTML` una vez obtenidos los datos.
+- **Estado inconsistente entre frontend y backend**  
+  En algunos casos los datos se mostraban incorrectamente por problemas de sincronización entre `fetch()` y el DOM. Implementé `async/await` y reestructuré la renderización con `innerHTML`.
 
+- **Rutas y controladores duplicados**  
+  El CRUD de proyectos estaba mal distribuido entre varios archivos. Reorganicé las rutas en módulos (`routes/project.js`, `middleware/`, `db/`), clasificando cada parte según su responsabilidad funcional. Esto mejoró mucho la claridad y mantenimiento del backend.
 
-- **Estructura duplicada de rutas:** Al principio, la lógica de creación, listado y eliminación de proyectos se me quedó desperdigada por diferentes archivos
-y mezclada con la gestión de usuarios, lo que me dificultó el desarrollo de partes posteriores de la aplicación. Por ejemplo, algunas funciones del CRUD de projects
-las tenía directamente en app.js, o en users.js. Lo que hice para resolver esto fue hacer un archivo en la carpeta de rutas , y empezar a separarlas por 
-dominios funcionales. Con dominio funcional me refiero a clasificarlas en una estructura modular de acuerdo a las tareas que realiza cada una: routes/ para los endpoints, middleware/ para las validaciones de acceso, y db/ para la conexión y creación de base de datos (init.js, database.js). Esto me permitió mejorar mi propio entendimiento de lo que estaba desarrollando al tener que estructurarlo mejor, con coherencia y un sentido, y fue útil para prevenir repeticiones de código.
+- **Faltaban validaciones**  
+  SQLite permitía insertar proyectos sin título o sin usuario asignado. Añadí `required` en el formulario y validaciones en el backend para asegurar la existencia de los campos necesarios.
 
-- **Errores al guardar datos:** Hubo un punto en el que SQLite me estaba permitiendo insertar algunos proyectos sin título, o sin ID de usuarios. Esto lo solucioné añadiendo validaciones al front, como el tag required a la hora de introducir el nombre del proyecto. En el lado del servidor, en el endpoint de creación del proyecto, validé que los campos username e id existiesen y tuviesen contenido.
+- **Visualización inconsistente en el dashboard**  
+  El dashboard no se actualizaba dinámicamente al crear un nuevo proyecto. Moví la lógica a una función reutilizable `loadProjects()`.
 
-- **Problemas visuales en el dashboard:**: Al crear un nuevo proyecto desde el formulario, se añadía correctamente a la base de datos, pero no se me actualizaba la lista en pantalla. Al principio, la lógica del código de cargar los proyectos estaba dentro del DOMContentLoaded del dashboard.js sin encapsular. Así que la moví 
-a una función loadProjects con la idea de reutilizarla cuando fuese necesario, como al crear un proyecto, o después de editarlo o borrarlo.
-
-- **TLDR: Esta fase se alargó porque tuve que corregir múltiples errores debido a mi inexperiencia a la hora de programar la lógica de la aplicación**, y cada error me forzaba a rehacer parte del código para mantenerlo estable.
+> **Resumen:** Esta fase se alargó debido a problemas derivados de mi inexperiencia. Cada error me obligó a repensar parte del sistema para mantenerlo estable.
 
 ---
 
-🟩 Fase de elaboración – Iteración 2 (Prueba de concepto)
-- **Persistencia de sesión:** Aunque al principio parecía que las sesiones funcionaban, noté que podía loguearme varias veces seguidas sin perder la sesión anterior, o incluso acceder al dashboard sin estar autenticado en ciertas condiciones. Esto se debía a que no estaba guardando las sesiones correctamente en disco, y se perdían tras reiniciar el servidor. Para solucionarlo, implementé express-session con connect-sqlite3 como store persistente, y modifiqué los middlewares isAuthenticated, preventLoginifAuthenticated y isAdmin para gestionar bien los accesos.
+#### 🟩 Iteración 2 – Prueba de concepto (control de sesiones)
 
--**Redirección automática y bloqueo de rutas:** Tuve que reestructurar el sistema para que, al iniciar sesión, se redirigiera automáticamente al dashboard si el login era correcto, y que este no fuese accesible directamente desde la URL si no había sesión activa. Esto implicó revisar la lógica de frontend y backend para unificar el comportamiento de acceso.
+- **Persistencia de sesión**  
+  Las sesiones se perdían tras reiniciar el servidor. Añadí `connect-sqlite3` como almacenamiento persistente.
 
--**Feedback visual tras login:** Al principio, si el login fallaba o se hacía correctamente, no se mostraban mensajes claros al usuario. Añadí mensajes dinámicos tanto en éxito como en error (por ejemplo: “Login successful” o “Wrong credentials”), con estilos de alerta de Bootstrap, para que el usuario supiera qué estaba ocurriendo.
+- **Redirección automática y bloqueo de rutas**  
+  Unifiqué lógica backend/frontend para redirigir al dashboard tras login y bloquear acceso directo si no hay sesión activa.
 
--**Visualización de usuario conectado:** Implementé la funcionalidad para que, una vez logueado, se mostrara el nombre del usuario en el frontend (con welcomeMessage) y también su rol (admin o user). Esto me obligó a crear un endpoint /auth/status que devolviese esta información y adaptarlo para que incluyera también el username de GitHub si estaba almacenado.
+- **Feedback visual tras login**  
+  Añadí mensajes dinámicos de éxito/error en el login usando `Bootstrap alert`.
 
-TLDR: Esta iteración se alargó más de lo previsto porque tuve que rehacer casi todo el sistema de control de sesión desde cero para evitar accesos indebidos y mostrar bien la información tras login.
+- **Visualización de usuario conectado**  
+  Implementé un endpoint `/auth/status` para obtener `username`, `role` y `githubUsername`, y mostrar el nombre en pantalla tras login.
+
+> **Resumen:** Tuve que rehacer el sistema de control de sesión desde cero, lo cual implicó más trabajo pero dio lugar a un sistema más robusto y seguro.
+
 ---
 
-🟦 Fase de construcción – Iteración 3 (Integración con GitHub)
-- **Problemas con CORS:**
-Al principio, intenté hacer directamente desde el frontend un fetch() a la URL pública de GitHub (https://api.github.com/users/{username}/repos). Esto funcionaba en local, pero al desplegar o probar en navegadores con políticas más estrictas, el navegador bloqueaba la solicitud por política de Cross-Origin Resource Sharing (CORS).
-Para solucionarlo, creé una ruta en el backend GET /github/repos, que recibe la petición desde el cliente, obtiene el username del usuario logueado (desde req.session) y luego hace la petición HTTP a GitHub desde el propio servidor utilizando node-fetch. Esto evitó completamente el problema de CORS, ya que la comunicación era backend-backend.
+#### 🟦 Iteración 3 – Integración con GitHub
 
--**Errores no tratados (usuario inválido o username no registrado):**
-En una primera versión, si el usuario no había introducido aún su GitHub username, el sistema seguía intentando hacer fetch a una URL inválida, lo que resultaba en errores silenciosos o en un listado vacío que confundía.
-Añadí una validación en la ruta /github/repos para verificar que req.session.githubUsername existiera antes de hacer la petición. En caso contrario, devolvía un 400 con { error: "GitHub username not set" }.
-También añadí manejo de errores en caso de que GitHub devolviese un error (por ejemplo, 404 si el usuario no existía). En el frontend, capturo ese error y muestro un mensaje en pantalla (list.innerHTML = 'No repositories found' o un mensaje de error si ocurre otra cosa).
+- **Problemas con CORS**  
+  La API de GitHub no permitía llamadas directas desde frontend. Solucioné esto creando una ruta proxy en backend (`/github/repos`) que hace la petición desde Node.
 
--**Precarga del GitHub username en el formulario del dashboard:**
-Modifiqué el endpoint /auth/status para que, además de devolver username y role, devolviese también githubUsername. Esto me permitió, en dashboard.js, detectar si el usuario ya tenía ese dato guardado en sesión y, en caso afirmativo, precargarlo directamente en el campo del formulario HTML (input#githubUsername).
-Además, creé el endpoint PUT /users/github que actualiza el campo githubUsername en la base de datos. Este endpoint verifica que:
--El usuario esté autenticado (req.session.userId).
--El campo githubUsername exista y no esté vacío.
--No se intente sobrescribir el username con valores null o undefined.
+- **Errores no tratados**  
+  Si no había `githubUsername`, la app fallaba silenciosamente. Añadí validación en backend y mensajes de error específicos en frontend.
 
--**Cambios en la base de datos y modelo de usuario:**
-Para almacenar este dato, modifiqué la base de datos añadiendo una nueva columna github_username a la tabla users. Para mantener la compatibilidad, usé un ALTER TABLE si ya había datos cargados en desarrollo. Esta columna se usa para:
-Precargar el valor en el frontend tras el login.
-Guardar el valor enviado desde el formulario al actualizarlo.
+- **Precarga del GitHub username**  
+  Modifiqué el endpoint `/auth/status` para incluir el `githubUsername` guardado y lo precargué en el formulario.
 
--**Cambios en el frontend (dashboard.js)**:
-Añadí la lógica para precargar el campo si data.githubUsername existe en la respuesta del endpoint /auth/status.
-Añadí un PUT que se activa al pulsar el botón "Actualizar GitHub username", con validación previa de que el campo no esté vacío.
-Añadí feedback dinámico: mensajes de éxito o error justo debajo del formulario, con estilos Bootstrap (alert-success o alert-danger), usando el elemento #githubStatus.
+- **Endpoint para actualizar GitHub username**  
+  Implementé `PUT /users/github`, validando que el campo no estuviese vacío ni fuese `null`.
+
+- **Modificación de la base de datos**  
+  Añadí la columna `github_username` con `ALTER TABLE`. Esto permitió guardar y mostrar correctamente el nombre de usuario en frontend.
+
+- **Cambios en `dashboard.js`**  
+  - Precarga del campo si ya existe en sesión.
+  - Validación de campos vacíos.
+  - Feedback visual con `alert-success` y `alert-danger`.
+
+> **Resumen:** Aunque parecía una mejora menor, la integración con GitHub implicó cambios importantes en backend, base de datos y frontend, y me permitió afianzar el uso de APIs externas.
+
 
 -**Clockify**
+
 - [Clockify](docs/Anteproyecto/Diagramas/Clockify.png)
 
 ⏱️ **Análisis y justificación del tiempo invertido**
@@ -388,27 +439,24 @@ Redactar el README y grabar los vídeos me llevó menos tiempo porque ya tenía 
 🔹 Pruebas finales (2h)
 Incluyen validaciones del flujo completo, repaso del login, redirecciones, errores de formulario y prueba de funcionalidades clave como roles o tareas. Aproveché para limpiar console.logs y mensajes irrelevantes.
 
-
 ## Presupuesto estimado para comprador
 
 ## 💰 Presupuesto estimado para comprador: Costes por fase del ciclo de vida
 
-| Recurso / Fase                    | Inicio | Elaboración | Construcción | Transición | Total (€) | Detalles                                                                  |
-|-----------------------------------|--------|-------------|--------------|------------|-----------|--------------------------------------------------------------------------|
-| 💻 Equipo informático             | 0 €    | 0 €         | 0 €          | 0 €        | 0 €       | Ordenador personal (amortizado previamente)                              |
-| 🧠 Coste de trabajo (12 €/h)      | 36 €   | 96 €        | 240 €        | 36 €       | 408 €     | Basado en Clockify real: 3h/Inicio, 8h/Elaboración, 20h/Construcción...  |
-| ⚡ Electricidad (0,30 €/h aprox.) | 1 €    | 3 €         | 6 €          | 1 €        | 11 €      | Estimación por consumo medio del equipo                                  |
-| 🌐 Internet                       | 2 €    | 2 €         | 3 €          | 1 €        | 8 €       | Parte proporcional del mes (tarifa mensual dividida entre fases)         |
-| 🧰 Software libre                 | 0 €    | 0 €         | 0 €          | 0 €        | 0 €       | VS Code, Node.js, SQLite, DB Browser, GitHub... (todos gratuitos)        |
-| 📚 Herramientas de documentación | 0 €    | 0 €         | 0 €          | 0 €        | 0 €       | LibreOffice, draw.io (gratuitos)                                         |
+| Recurso / Fase                    | Inicio | Elaboración | Construcción | Transición | Total (€) | Detalles                                                                |
+| --------------------------------- | ------ | ----------- | ------------ | ---------- | --------- | ----------------------------------------------------------------------- |
+| 💻 Equipo informático             | 0 €    | 0 €         | 0 €          | 0 €        | 0 €       | Ordenador personal (amortizado previamente)                             |
+| 🧠 Coste de trabajo (12 €/h)      | 36 €   | 96 €        | 240 €        | 36 €       | 408 €     | Basado en Clockify real: 3h/Inicio, 8h/Elaboración, 20h/Construcción... |
+| ⚡ Electricidad (0,30 €/h aprox.) | 1 €    | 3 €         | 6 €          | 1 €        | 11 €      | Estimación por consumo medio del equipo                                 |
+| 🌐 Internet                       | 2 €    | 2 €         | 3 €          | 1 €        | 8 €       | Parte proporcional del mes (tarifa mensual dividida entre fases)        |
+| 🧰 Software libre                 | 0 €    | 0 €         | 0 €          | 0 €        | 0 €       | VS Code, Node.js, SQLite, DB Browser, GitHub... (todos gratuitos)       |
+| 📚 Herramientas de documentación  | 0 €    | 0 €         | 0 €          | 0 €        | 0 €       | LibreOffice, draw.io (gratuitos)                                        |
 
 ---
 
 ### 📊 Total estimado: **427 €**
 
 > **Amortización software**: No hay coste directo, ya que toda la pila de tecnologías empleada (Node.js, Express, SQLite, GitHub, Bootstrap, DB Browser, etc.) es de uso libre o gratuito, tanto en entorno de desarrollo como en despliegue (Render gratuito). Por tanto, su "amortización" se refleja en el valor del tiempo dedicado en cada fase.
-
-
 
 ## 🧠 Conclusiones
 
@@ -446,8 +494,8 @@ Durante el desarrollo real del proyecto me enfrenté a varias dificultades técn
 
 En resumen, he ganado soltura en Node.js, comprensión del ciclo de vida de una aplicación y capacidad para organizar un desarrollo completo por fases, desde cero hasta el despliegue.
 
-
 ## 📚 Bibliografía / Recursos
+
 - [MDN Web Docs](https://developer.mozilla.org/es/)
 - [Node.js](https://nodejs.org/)
 - [Express.js](https://expressjs.com/)
