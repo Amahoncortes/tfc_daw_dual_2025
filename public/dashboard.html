@@ -1,72 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DevOps Hub - Panel</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="js/protectDashboard.js"></script>
-</head>
-<body class="bg-light">
-
-  <!-- Navbar interna -->
-  <header class="bg-white py-3 shadow-sm position-relative z-3">
-    <div class="container d-flex justify-content-between align-items-center">
-      <h1 class="h4 m-0 text-primary">DevOps Hub</h1>
-      <nav class="d-flex align-items-center gap-3">
-        <span id="welcomeMessage" class="text-muted"></span>
-        <button id="logoutBtn" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container my-5">
-    <div class="card shadow">
-      <div class="card-header bg-primary text-white text-center">
-        <h2 class="mb-0">Panel de usuario</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevOps Hub - Panel principal</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/protectDashboard.js"></script>
+  </head>
+  <body class="bg-light">
+    <header class="bg-white py-3 shadow-sm">
+      <div class="container d-flex justify-content-between align-items-center">
+        <h1 class="h4 m-0 text-primary">DevOps Hub</h1>
+        <nav class="d-flex align-items-center gap-3">
+          <span id="welcomeMessage" class="text-muted"></span>
+          <button id="logoutBtn" class="btn btn-outline-danger btn-sm">
+            Cerrar sesión
+          </button>
+        </nav>
       </div>
-      <div class="card-body">
-        <div id="rolUsuario" class="mb-3 text-muted"></div>
+    </header>
 
-        <!-- Crear proyecto -->
-        <h5 class="mt-4">Crear nuevo proyecto</h5>
-        <form id="projectForm" class="mb-4">
-          <div class="mb-3">
-            <input type="text" class="form-control" id="projectName" placeholder="Nombre del proyecto" required />
-          </div>
-          <div class="mb-3">
-            <textarea class="form-control" id="projectDescription" placeholder="Descripción (opcional)"></textarea>
-          </div>
-          <button type="submit" class="btn btn-success">Crear proyecto</button>
-          <div id="projectAlert" class="mt-2"></div>
-        </form>
+    <main class="container text-center my-5">
+      <h2 class="mb-4 text-primary">Centro de operaciones</h2>
+      <p class="text-muted">Selecciona una acción para continuar:</p>
 
-        <!-- GitHub username -->
-        <h5>Configurar nombre de usuario de GitHub</h5>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="githubUsername" placeholder="Usuario de GitHub" />
-          <button class="btn btn-outline-dark" onclick="updateGithubUsername()">Guardar</button>
-        </div>
-        <small id="githubStatus" class="text-muted d-none"></small>
-
-        <!-- Acciones de administrador -->
-        <div id="adminActions" class="mt-4"></div>
-
-        <!-- Lista de proyectos -->
-        <h5 class="mt-4">Tus proyectos</h5>
-        <ul id="projectList" class="list-group mb-4"></ul>
-
-        <!-- Repos públicos de GitHub -->
-        <h5>Repositorios públicos de GitHub</h5>
-        <button id="loadRepos" class="btn btn-dark mb-3">Cargar repos</button>
-        <ul id="repoList" class="list-group"></ul>
+      <div class="d-flex flex-column align-items-center gap-4 mt-5">
+        <a href="projects.html" class="btn btn-success btn-lg w-50"
+          >Gestión de Proyectos</a
+        >
+        <a href="github.html" class="btn btn-dark btn-lg w-50"
+          >Operaciones con GitHub</a
+        >
+        <!-- Botón solo para admin -->
+        <div id="adminActions" class="text-center mt-5"></div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/dashboard.js" defer></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js" defer></script>
+  </body>
 </html>

@@ -38,16 +38,8 @@ function loadUsers() {
 
         const badge =
           user.role === "admin"
-            ? `<span class="badge ${
-                isCurrent ? "bg-warning text-dark" : "bg-danger"
-              } ms-2"><i class="bi bi-shield-lock-fill"></i> ${user.role}${
-                isCurrent ? " (tú)" : ""
-              }</span>`
-            : `<span class="badge ${
-                isCurrent ? "bg-info text-dark" : "bg-secondary"
-              } ms-2"><i class="bi bi-person-fill"></i> ${user.role}${
-                isCurrent ? " (tú)" : ""
-              }</span>`;
+            ? `<span class="badge ${isCurrent ? "bg-warning text-dark" : "bg-danger"} ms-2"><i class="bi bi-shield-lock-fill"></i> ${user.role}${isCurrent ? " (tú)" : ""}</span>`
+            : `<span class="badge ${isCurrent ? "bg-info text-dark" : "bg-secondary"} ms-2"><i class="bi bi-person-fill"></i> ${user.role}${isCurrent ? " (tú)" : ""}</span>`;
 
         const newRole = user.role === "admin" ? "user" : "admin";
         const icon =
@@ -55,19 +47,26 @@ function loadUsers() {
             ? `<i class="bi bi-shield-lock-fill me-1"></i>`
             : `<i class="bi bi-person-fill me-1"></i>`;
 
-        const btn = `
-          <button class="btn btn-sm btn-outline-primary" onclick="updateRole(${
-            user.id
-          }, '${newRole}')" ${isCurrent ? "disabled" : ""}>
+        const changeRoleBtn = `
+          <button class="btn btn-sm btn-outline-primary me-2" onclick="updateRole(${user.id}, '${newRole}')" ${isCurrent ? "disabled" : ""}>
             ${icon}Cambiar a ${newRole}
           </button>
         `;
+
+        const deleteBtn = isCurrent
+          ? `<span class="text-muted small">No se puede eliminar</span>`
+          : `<button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id}, '${user.username}')">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>`;
 
         li.innerHTML = `
           <div>
             <strong>${user.username}</strong> (ID ${user.id}) ${badge}
           </div>
-          ${btn}
+          <div class="d-flex align-items-center">
+            ${changeRoleBtn}
+            ${deleteBtn}
+          </div>
         `;
 
         list.appendChild(li);
@@ -93,5 +92,25 @@ function updateRole(id, newRole) {
       alert("Error al actualizar rol");
     });
 }
-// Expose the function so it can be called from HTML
+
+function deleteUser(id, username) {
+  if (!confirm(`¿Estás seguro de que deseas eliminar al usuario "${username}"?`)) return;
+
+  fetch(`/users/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Error al eliminar el usuario");
+      return res.json();
+    })
+    .then(() => {
+      alert(`Usuario "${username}" eliminado.`);
+      loadUsers();
+    })
+    .catch((err) => alert(`No se pudo eliminar el usuario: ${err.message}`));
+}
+
+// Exponer funciones globalmente
 window.updateRole = updateRole;
+window.deleteUser = deleteUser;
