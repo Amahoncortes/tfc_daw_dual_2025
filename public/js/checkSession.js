@@ -6,7 +6,7 @@ fetch('/auth/status', {
   if (res.ok) {
     return res.json();
   }
-  throw new Error('No active session');
+  throw new Error('Sin sesión activa');
 })
 .then(data => {
   if (data.isLoggedIn) {

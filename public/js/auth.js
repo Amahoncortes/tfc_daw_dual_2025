@@ -37,12 +37,12 @@ form.addEventListener('submit', async (e) => {
       window.location.href = 'dashboard.html';
     } else {
       // Mostrar error si las credenciales son inválidas
-      showError(result.error || 'Incorrect credentials.');
+      showError(result.error || 'Credenciales incorrectas.');
     }
 
   } catch (err) {
     // Error general de red o del servidor
-    showError('Could not connect to the server.');
+    showError('No se pudo conectar al servidor.');
   }
 
   // Ocultar spinner y reactivar botón
@@ -55,7 +55,7 @@ function showError(message) {
   alertContainer.innerHTML = `
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
       ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
   `;
 }

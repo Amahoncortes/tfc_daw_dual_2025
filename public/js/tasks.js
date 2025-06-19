@@ -6,7 +6,7 @@ function loadTasks() {
   // Mostrar texto de carga
   list.innerHTML = `
     <li class="list-group-item text-center text-muted">
-     Loading tasks...
+     Cargando tareas...
     </li>`;
 
   fetch(`/tasks/${projectId}`)
@@ -16,7 +16,7 @@ function loadTasks() {
       if (tasks.length === 0) {
         list.innerHTML = `
           <li class="list-group-item text-center text-muted">
-            No tasks yet.
+            No hay tareas aún.
           </li>`;
         return;
       }
@@ -41,16 +41,16 @@ function loadTasks() {
             }>
               ${task.title}
             </strong><br />
-            <small>${task.description || "No description"}</small><br />
+            <small>${task.description || "Sin descripción"}</small><br />
             <span class="badge ${
-              task.status === "completed" ? "bg-success" : "bg-secondary"
+              task.status === "completada" ? "bg-success" : "bg-secondary"
             }">${task.status}</span>
           </div>
           <div class="btn-group">
             <button onclick="toggleStatus(${task.id}, '${
           task.status
         }')" class="btn btn-sm btn-warning">
-              ${task.status === "completed" ? "↩️" : "✅"}
+              ${task.status === "completada" ? "↩️" : "✅"}
             </button>
             <button onclick="deleteTask(${
               task.id
@@ -63,14 +63,14 @@ function loadTasks() {
     .catch((err) => {
       list.innerHTML = `
         <li class="list-group-item text-center text-danger">
-          Error loading tasks
+          Error cargando tareas.
         </li>`;
       console.error(err);
     });
 }
 
 function toggleStatus(id, currentStatus) {
-  const newStatus = currentStatus === "completed" ? "pending" : "completed";
+  const newStatus = currentStatus === "completada" ? "pendiente" : "completada";
 
   fetch(`/tasks/${id}/status`, {
     method: "PUT",
@@ -78,35 +78,35 @@ function toggleStatus(id, currentStatus) {
     body: JSON.stringify({ status: newStatus }),
   })
     .then((res) => {
-      if (!res.ok) throw new Error("Error updating task status.");
+      if (!res.ok) throw new Error("Error al actualizar estado de la tarea.");
       return res.json();
     })
     .then(() => {
-      showMessage(`Task marked as ${newStatus}`);
+      showMessage(`Tarea marcada como ${newStatus}`);
       loadTasks();
     })
     .catch((err) => {
-      showMessage("Error updating task", true);
+      showMessage("Error al actualizar tarea", true);
       console.error(err);
     });
 }
 
 function deleteTask(id) {
-  if (!confirm("¿Remove this task?")) return;
+  if (!confirm("¿Eliminar esta tarea?")) return;
 
   fetch(`/tasks/${id}`, {
     method: "DELETE",
   })
     .then((res) => {
-      if (!res.ok) throw new Error("Error eliminating task.");
+      if (!res.ok) throw new Error("Error al eliminar tarea.");
       return res.json();
     })
     .then(() => {
-      showMessage("Task eliminated successfully");
+      showMessage("Tarea eliminada con éxito");
       loadTasks(); // recargar lista
     })
     .catch((err) => {
-      showMessage("Error eliminating task.", true);
+      showMessage("Error al eliminar tarea.", true);
       console.error(err);
     });
 }
@@ -135,12 +135,12 @@ document.getElementById("taskForm").addEventListener("submit", function (e) {
 
   // Validación
   if (title === "") {
-    showMessage("Title cannot be empty", true);
+    showMessage("El título no puede estar vacío", true);
     return;
   }
 
   if (title.length > 100) {
-    showMessage("Title is too long (max 100 characters).", true);
+    showMessage("El título es demasiado largo (máx. 100 caracteres).", true);
     return;
   }
 
@@ -156,12 +156,12 @@ document.getElementById("taskForm").addEventListener("submit", function (e) {
   })
     .then((res) => res.json())
     .then(() => {
-      showMessage("Task created successfully");
+      showMessage("Tarea creada con éxito");
       this.reset();
       loadTasks();
     })
     .catch((err) => {
-      showMessage("Error creating task", true);
+      showMessage("Error al crear tarea", true);
       console.error(err);
     });
 });

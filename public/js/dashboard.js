@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     button.href = "handleUsers.html";
     button.className = "btn btn-outline-primary";
-    button.textContent = "Manage users";
+    button.textContent = "Administrar usuarios";
 
     container.appendChild(button);
   }

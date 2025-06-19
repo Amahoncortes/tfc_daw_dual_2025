@@ -74,7 +74,7 @@ function loadUsers() {
       });
     })
     .catch(() => {
-      alert("Error loading users.");
+      alert("Error al cargar usuarios.");
     });
 }
 
@@ -86,11 +86,11 @@ function updateRole(id, newRole) {
   })
     .then((res) => res.json())
     .then((data) => {
-      alert(data.message || "Role updated");
+      alert(data.message || "Rol actualizado");
       loadUsers(); // Reload list
     })
     .catch(() => {
-      alert("Error updating role");
+      alert("Error al actualizar rol");
     });
 }
 // Expose the function so it can be called from HTML

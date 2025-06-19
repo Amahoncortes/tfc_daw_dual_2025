@@ -3,7 +3,7 @@ fetch('/auth/status', {
   credentials: 'include'
 })
   .then(res => {
-    if (!res.ok) throw new Error('No session');
+    if (!res.ok) throw new Error('No hay sesión activa');
     return res.json();
   })
   .then(data => {
