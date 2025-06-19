@@ -8,10 +8,10 @@ router.post("/", isAuthenticated, (req, res) => {
   const { name, description } = req.body;
   const userId = req.session.userId;
 
-  if (!name) {
+  if (!name || !userId) {
     return res
       .status(400)
-      .json({ error: "Name project is required" });
+      .json({ error: "Name project and user ID are required" });
   }
 
   const now = new Date()
