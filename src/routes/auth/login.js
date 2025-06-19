@@ -78,10 +78,10 @@ router.get("/status", (req, res) => {
     [userId],
     (err, row) => {
       if (err) {
-        console.error("Error retrieving GitHub username:", err);
+        console.error("Error recuperando nombre de usuario de GitHub:", err);
         return res
           .status(500)
-          .json({ error: "Error retrieving GitHub username" });
+          .json({ error: "Error recuperando nombre de usuario de GitHub" });
       }
 
       res.json({

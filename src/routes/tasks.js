@@ -60,7 +60,7 @@ router.put("/:taskId/status", isAuthenticated, (req, res) => {
     [status, taskId],
     function (err) {
       if (err) return res.status(500).json({ error: err.message });
-      res.json({ message: "Task status updated" });
+      res.json({ message: "Estado de tarea actualizado" });
     }
   );
 });
@@ -70,7 +70,7 @@ router.delete("/:taskId", isAuthenticated, (req, res) => {
   const taskId = parseInt(req.params.taskId);
   db.run("DELETE FROM tasks WHERE id = ?", [taskId], function (err) {
     if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: "Task deleted successfully" });
+    res.json({ message: "Tarea eliminada con éxito" });
   });
 });
 

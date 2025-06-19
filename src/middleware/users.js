@@ -1,7 +1,7 @@
 function canDeleteUser(req, res, next) {
   // Verificar autenticación
   if (!req.session || !req.session.isLoggedIn) {
-    return res.status(401).json({ error: 'Access denied. Log in first.' });
+    return res.status(401).json({ error: 'Acceso denegado. Inicia sesión.' });
   }
   
   const requestedUserId = parseInt(req.params.id);
@@ -12,7 +12,7 @@ function canDeleteUser(req, res, next) {
     return next();
   } else {
     // Aquí se puede implementar verificación de administrador en el futuro
-    return res.status(403).json({ error: 'You do not have permission to delete this user.' });
+    return res.status(403).json({ error: 'No tienes permiso para borrar este usuario.' });
   }
 }
 

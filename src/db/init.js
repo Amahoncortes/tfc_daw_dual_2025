@@ -27,7 +27,7 @@ db.serialize(() => {
   project_id INTEGER NOT NULL,
   title TEXT NOT NULL,
   description TEXT,
-  status TEXT DEFAULT 'pending', -- estados: pending, in_progress, done
+  status TEXT DEFAULT 'pendiente', -- estados: pendiente, en_progreso, completada
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
     )`);

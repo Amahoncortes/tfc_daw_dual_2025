@@ -29,7 +29,7 @@ router.get("/", isAuthenticated, (req, res) => {
         if (!Array.isArray(data)) {
           return res
             .status(500)
-            .json({ error: "GitHub API did not return an array.", raw: data });
+            .json({ error: "La API de GitHub no devolvió un array.", raw: data });
         }
 
         const repos = data.map((repo) => ({
@@ -40,10 +40,10 @@ router.get("/", isAuthenticated, (req, res) => {
 
         res.json(repos);
       } catch (error) {
-        console.error("Error fetching from GitHub:", error.message);
+        console.error("Error recuperando datos de GitHub:", error.message);
         res
           .status(500)
-          .json({ error: "Failed to fetch repos", details: error.message });
+          .json({ error: "Error al recuperar repositorios", details: error.message });
       }
     }
   );

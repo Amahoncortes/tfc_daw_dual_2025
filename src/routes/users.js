@@ -118,7 +118,7 @@ router.patch("/:id/role", isAuthenticated, isAdmin, (req, res) => {
   const { role } = req.body;
 
   if (!["user", "admin"].includes(role)) {
-    return res.status(400).json({ error: "Role is invalid." });
+    return res.status(400).json({ error: "El rol es inválido." });
   }
 
   const query = "UPDATE users SET role = ? WHERE id = ?";
@@ -126,12 +126,12 @@ router.patch("/:id/role", isAuthenticated, isAdmin, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error updating role", details: err.message });
+        .json({ error: "Error actualizando el rol", details: err.message });
     }
     if (this.changes === 0) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Usuario no encontrado" });
     }
-    res.json({ message: "Role updated successfully" });
+    res.json({ message: "Rol actualizado con éxito" });
   });
 });
 
@@ -141,7 +141,7 @@ router.put("/github", isAuthenticated, async (req, res) => {
   const { githubUsername } = req.body;
 
   if (!githubUsername || typeof githubUsername !== "string") {
-    return res.status(400).json({ error: "GitHub username is required." });
+    return res.status(400).json({ error: "Se requiere el nombre de usuario de GitHub." });
   }
 
   db.run(
@@ -152,10 +152,10 @@ router.put("/github", isAuthenticated, async (req, res) => {
         console.error("DB error:", err);
         return res
           .status(500)
-          .json({ error: "Error updating GitHub username." });
+          .json({ error: "Error actualizando el nombre de usuario de GitHub." });
       }
 
-      res.json({ message: "GitHub username updated successfully." });
+      res.json({ message: "Nombre de usuario de GitHub actualizado con éxito." });
     }
   );
 });
