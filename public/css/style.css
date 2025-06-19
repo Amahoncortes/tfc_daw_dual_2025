@@ -1,26 +1,101 @@
+/* --- Estilo base y tipografía --- */
 body {
-  background-color: #f8f9fa;
+  background-color: #f5f7fa;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.container {
-  max-width: 900px;
-  margin: 2rem auto;
-  background: white;
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.1);
+  color: #2c3e50;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
-  font-weight: 600;
+  font-weight: 700;
+  color: #2c3e50;
 }
 
-button, .btn {
+/* --- Navegación --- */
+header nav a {
   font-weight: 500;
+  transition: color 0.2s ease;
 }
 
-.list-group-item {
+header nav a:hover {
+  color: #4a69bd;
+}
+
+.btn, button {
+  font-weight: 600;
+  border-radius: 0.6rem;
+  padding: 0.5rem 1.2rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #4a69bd, #1e3799);
   border: none;
-  border-bottom: 1px solid #e0e0e0;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, #1e3799, #4a69bd);
+  box-shadow: 0 4px 12px rgba(74, 105, 189, 0.4);
+}
+
+/* --- Login Container --- */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.login-container svg {
+  pointer-events: none;
+}
+
+/* --- Formulario --- */
+.form-control {
+  border-radius: 0.5rem;
+  border: 1px solid #ced4da;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #4a69bd;
+  box-shadow: 0 0 0 0.2rem rgba(74, 105, 189, 0.25);
+}
+
+/* --- Imagen decorativa --- */
+img.shadow {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+/* --- Pie de página --- */
+footer {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  background-color: white;
+}
+
+footer a {
+  transition: color 0.2s ease;
+}
+
+footer a:hover {
+  color: #4a69bd;
+}
+
+/* --- Z-index para capas --- */
+.z-1 {
+  z-index: 1 !important;
+}
+.z-2 {
+  z-index: 2 !important;
+}
+.z-3 {
+  z-index: 3 !important;
 }
