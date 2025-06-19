@@ -20,11 +20,12 @@ router.get("/:projectId", isAuthenticated, (req, res) => {
 router.post("/:projectId", isAuthenticated, (req, res) => {
   const { title, description } = req.body;
   const projectId = parseInt(req.params.projectId);
-  if (!title) return res.status(400).json({ error: "Title is required" });
+  if (!title) return res.status(400).json({ error: "Se requiere título." });
 
+  const status = "pendiente"; // Estado por defecto al crear una tarea
   db.run(
-    "INSERT INTO tasks (project_id, title, description) VALUES (?, ?, ?)",
-    [projectId, title, description || null],
+    "INSERT INTO tasks (project_id, title, description, status) VALUES (?, ?, ?, ?)",
+    [projectId, title, description || null, status],
     function (err) {
       if (err) return res.status(500).json({ error: err.message });
       res.status(201).json({ id: this.lastID });

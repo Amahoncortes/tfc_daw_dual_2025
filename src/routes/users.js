@@ -71,7 +71,7 @@ router.get("/", isAuthenticated, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error fetching users", details: err.message });
+        .json({ error: "Error al buscar usuarios", details: err.message });
     }
     res.status(200).json(rows);
   });
@@ -83,7 +83,7 @@ router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
 
   //Verificar que el ID del usuario sea un número válido
   if (isNaN(userId)) {
-    return res.status(400).json({ error: "Invalid user ID." });
+    return res.status(400).json({ error: "ID de usuario inválido." });
   }
 
   //Verificar que el usuario existe ante de eliminarlo
@@ -91,11 +91,11 @@ router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error fetching user", details: err.message });
+        .json({ error: "Error al buscar usuario", details: err.message });
     }
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
     //Eliminar el usuario
@@ -103,11 +103,11 @@ router.delete("/:id", isAuthenticated, canDeleteUser, (req, res) => {
       if (err) {
         return res
           .status(500)
-          .json({ error: "Error deleting user", details: err.message });
+          .json({ error: "Error eliminando usuario", details: err.message });
       }
       res
         .status(200)
-        .json({ message: "User deleted successfully", userId: userId });
+        .json({ message: "Usuario eliminado con éxito", userId: userId });
     });
   });
 });

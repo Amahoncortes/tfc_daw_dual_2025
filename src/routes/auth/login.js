@@ -9,7 +9,7 @@ router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ error: "Username & password required." });
+    return res.status(400).json({ error: "Se requiere usuario y contraseña." });
   }
   // Verificar si el usuario existe (ignorando mayúsculas/minúsculas)
   const query = "SELECT * FROM users WHERE LOWER(username) = LOWER(?)";
@@ -17,11 +17,11 @@ router.post("/login", (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error fetching user", details: err.message });
+        .json({ error: "Error al buscar usuario", details: err.message });
     }
 
     if (!user) {
-      return res.status(401).json({ error: "User not found" });
+      return res.status(401).json({ error: "Usuario no encontrado" });
     }
 
     try {
@@ -31,15 +31,15 @@ router.post("/login", (req, res) => {
         req.session.username = user.username;
         req.session.isLoggedIn = true;
         req.session.role = user.role || "user"; // Asignar rol por defecto si no existe
-        return res.status(200).json({ message: "Login successful" });
+        return res.status(200).json({ message: "Login exitoso" });
       } else {
-        return res.status(401).json({ error: "Invalid password" });
+        return res.status(401).json({ error: "Contraseña inválida" });
       }
     } catch (error) {
-      console.error("Error verifying password:", error);
+      console.error("Error verificando contraseña:", error);
       return res
         .status(500)
-        .json({ error: "Server internal error", details: error.message });
+        .json({ error: "Error interno del servidor", details: error.message });
     }
   });
 });
@@ -51,13 +51,13 @@ router.get("/logout", isAuthenticated, (req, res) => {
       if (err) {
         return res
           .status(500)
-          .json({ error: "Error logging out", details: err.message });
+          .json({ error: "Error al cerrar sesión", details: err.message });
       }
       res.clearCookie("connect.sid");
-      res.json({ message: "Logout successful" });
+      res.json({ message: "Logout exitoso" });
     });
   } else {
-    return res.status(401).json({ error: "No user session found" });
+    return res.status(401).json({ error: "No se encontró sesión de usuario" });
   }
 });
 
@@ -67,7 +67,7 @@ router.get("/status", (req, res) => {
   if (!req.session || !req.session.isLoggedIn) {
     return res.json({
       isLoggedIn: false,
-      message: "No active session",
+      message: "No hay sesión activa",
     });
   }
 
