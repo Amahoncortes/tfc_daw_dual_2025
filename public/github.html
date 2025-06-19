@@ -1,58 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DevOps Hub - GitHub</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="js/protectDashboard.js"></script>
-</head>
-<body class="bg-light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevOps Hub - GitHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/protectDashboard.js"></script>
+  </head>
+  <body class="bg-light">
+    <!-- Navbar -->
+    <header class="bg-white py-3 shadow-sm">
+      <div class="container d-flex justify-content-between align-items-center">
+        <h1 class="h4 m-0">
+          <a href="dashboard.html" class="text-decoration-none text-primary"
+            >DevOps Hub</a
+          >
+        </h1>
 
-  <!-- Navbar -->
-  <header class="bg-white py-3 shadow-sm">
-    <div class="container d-flex justify-content-between align-items-center">
-      <h1 class="h4 m-0 text-primary">DevOps Hub</h1>
-      <nav class="d-flex align-items-center gap-3">
-        <a href="dashboard.html" class="btn btn-outline-primary btn-sm">← Volver al Panel</a>
-        <button id="logoutBtn" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Contenido -->
-  <main class="container my-5">
-    <h2 class="mb-4 text-dark text-center">Operaciones con GitHub</h2>
-
-    <!-- GitHub Username -->
-    <div class="card shadow mb-4">
-      <div class="card-header bg-dark text-white">
-        <h5 class="mb-0">Configurar nombre de usuario de GitHub</h5>
+        <nav class="d-flex align-items-center gap-3">
+          <a href="dashboard.html" class="btn btn-outline-primary btn-sm"
+            >← Volver al Panel</a
+          >
+          <button id="logoutBtn" class="btn btn-outline-danger btn-sm">
+            Cerrar sesión
+          </button>
+        </nav>
       </div>
-      <div class="card-body">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="githubUsername" placeholder="Usuario de GitHub" />
-          <button class="btn btn-outline-dark" onclick="updateGithubUsername()">Guardar</button>
+    </header>
+
+    <!-- Contenido -->
+    <main class="container my-5">
+      <h2 class="mb-4 text-dark text-center">Operaciones con GitHub</h2>
+
+      <!-- GitHub Username -->
+      <div class="card shadow mb-4">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Configurar nombre de usuario de GitHub</h5>
         </div>
-        <small id="githubStatus" class="text-muted d-none"></small>
+        <div class="card-body">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="githubUsername"
+              placeholder="Usuario de GitHub"
+            />
+            <button
+              class="btn btn-outline-dark"
+              onclick="updateGithubUsername()"
+            >
+              Guardar
+            </button>
+          </div>
+          <small id="githubStatus" class="text-muted d-none"></small>
+        </div>
       </div>
-    </div>
 
-    <!-- Lista de repos -->
-    <div class="card shadow">
-      <div class="card-header bg-light">
-        <h5 class="mb-0">Repositorios públicos de GitHub</h5>
+      <!-- Lista de repos -->
+      <div class="card shadow">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Repositorios públicos de GitHub</h5>
+        </div>
+        <div class="card-body">
+          <button id="loadRepos" class="btn btn-dark mb-3">Cargar repos</button>
+          <ul id="repoList" class="list-group"></ul>
+        </div>
       </div>
-      <div class="card-body">
-        <button id="loadRepos" class="btn btn-dark mb-3">Cargar repos</button>
-        <ul id="repoList" class="list-group"></ul>
-      </div>
-    </div>
-  </main>
+    </main>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/github.js" defer></script>
-</body>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/github.js" defer></script>
+  </body>
 </html>
