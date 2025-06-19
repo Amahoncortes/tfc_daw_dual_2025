@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const alert = document.getElementById("projectAlert");
     if (res.ok) {
       alert.innerHTML =
-        '<div class="alert alert-success">Project created</div>';
+        '<div class="alert alert-success">Proyecto creado con éxito</div>';
       form.reset();
       loadProjects();
     } else {
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const list = document.getElementById("projectList");
         list.innerHTML = "";
         if (projects.length === 0) {
-          list.innerHTML = '<li class="list-group-item">No projects yet.</li>';
+          list.innerHTML = '<li class="list-group-item">No hay proyectos aún.</li>';
         } else {
           projects.forEach((p) => {
             const li = document.createElement("li");
@@ -89,16 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <em>${formattedDate}</em><br>
             <button class="btn btn-sm btn-primary mt-1" onclick="seeProjects(${
               p.id
-            })">View</button>
+            })">Ver</button>
             <button class="btn btn-sm btn-warning mt-1" onclick="editProjects(${
               p.id
-            })">Edit</button>
+            })">Editar</button>
             <button class="btn btn-sm btn-danger mt-1" onclick="deleteProjects(${
               p.id
-            })">Delete</button>
+            })">Eliminar</button>
             <button class="btn btn-sm btn-info mt-1" onclick="viewTasks(${
               p.id
-            })">Tasks</button>
+            })">Tareas</button>
           `;
             list.appendChild(li);
           });
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch((err) => {
-        console.error("Could not fetch user role:", err);
+        console.error("No se pudo obtener el rol del usuario:", err);
       });
   }
 
@@ -126,18 +126,18 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(`/projects/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        alert(`Project: ${data.name}\nDescription: ${data.description}`);
+        alert(`Proyecto: ${data.name}\nDescripción: ${data.description}`);
       })
-      .catch((err) => alert("Error fetching project"));
+      .catch((err) => alert("Error al obtener proyecto"));
   }
 
   // Función para editar
   function editProjects(id) {
-    const newName = prompt("New name:");
-    const newDescription = prompt("New description:");
+    const newName = prompt("Nuevo nombre:");
+    const newDescription = prompt("Nueva descripción:");
 
     if (!newName && !newDescription) {
-      return alert("You must introduce at least one change.");
+      return alert("Debes introducir al menos un cambio.");
     }
 
     fetch(`/projects/${id}`, {
@@ -150,25 +150,25 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        alert("Project updated successfully");
+        alert("Proyecto actualizado con éxito");
         loadProjects(); // Reload list
       })
-      .catch((err) => alert("Error updating project"));
+      .catch((err) => alert("Error al actualizar proyecto"));
   }
 
   // Función para eliminar
   function deleteProjects(id) {
-    if (!confirm("¿Are you sure you want to delete this project?")) return;
+    if (!confirm("¿Estás seguro de que deseas eliminar este proyecto?")) return;
 
     fetch(`/projects/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
       .then((data) => {
-        alert("Project deleted");
+        alert("Proyecto eliminado con éxito");
         loadProjects(); // Reload list
       })
-      .catch((err) => alert("Error deleting project"));
+      .catch((err) => alert("Error al eliminar proyecto"));
   }
 
   function viewTasks(projectId) {
@@ -197,14 +197,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!Array.isArray(repos)) {
           list.innerHTML = `<li class="list-group-item text-danger">Error: ${
-            repos.error || "Unexpected response"
+            repos.error || "Respuesta inesperada"
           }</li>`;
           return;
         }
 
         if (repos.length === 0) {
           list.innerHTML =
-            '<li class="list-group-item">No repositories found.</li>';
+            '<li class="list-group-item">No se encontraron repositorios.</li>';
         } else {
           repos.forEach((repo) => {
             const li = document.createElement("li");
@@ -213,14 +213,14 @@ document.addEventListener("DOMContentLoaded", () => {
               <a href="${repo.html_url}" target="_blank">
                 <strong>${repo.name}</strong>
               </a><br>
-              <small>${repo.description || "No description"}</small>`;
+              <small>${repo.description || "Sin descripción"}</small>`;
             list.appendChild(li);
           });
         }
       })
       .catch((err) => {
         const list = document.getElementById("repoList");
-        list.innerHTML = `<li class="list-group-item text-danger">Fetch error: ${err.message}</li>`;
+        list.innerHTML = `<li class="list-group-item text-danger">Error de fetch: ${err.message}</li>`;
       });
   });
 
@@ -237,7 +237,7 @@ function updateGithubUsername() {
   const status = document.getElementById("githubStatus");
 
   if (!username) {
-    alert("Please enter a valid GitHub username.");
+    alert("Por favor, introduce un nombre de usuario de GitHub válido.");
     return;
   }
 
@@ -248,16 +248,16 @@ function updateGithubUsername() {
     body: JSON.stringify({ githubUsername: username }),
   })
     .then((res) => {
-      if (!res.ok) throw new Error("Error saving GitHub username.");
+      if (!res.ok) throw new Error("Error al guardar el nombre de usuario de GitHub.");
       return res.json();
     })
     .then(() => {
-      status.textContent = "GitHub username updated successfully.";
+      status.textContent = "Nombre de usuario de GitHub actualizado con éxito.";
       status.classList.remove("d-none", "text-danger");
       status.classList.add("text-success");
     })
     .catch((err) => {
-      status.textContent = "Error updating GitHub username.";
+      status.textContent = "Error al actualizar el nombre de usuario de GitHub.";
       status.classList.remove("d-none", "text-success");
       status.classList.add("text-danger");
       console.error(err);

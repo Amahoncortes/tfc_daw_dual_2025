@@ -11,7 +11,7 @@ router.post("/", isAuthenticated, (req, res) => {
   if (!name || !userId) {
     return res
       .status(400)
-      .json({ error: "Name project and user ID are required" });
+      .json({ error: "Se requiere nombre de proyecto y ID de usuario" });
   }
 
   const now = new Date()
@@ -25,7 +25,7 @@ router.post("/", isAuthenticated, (req, res) => {
         .json({ error: "Error creating project", details: err.message });
     }
     res.status(201).json({
-      message: "Project created successfully",
+      message: "Proyecto creado con éxito",
       projectId: this.lastID,
     });
   });
@@ -40,7 +40,7 @@ router.get("/", isAuthenticated, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error fetching projects", details: err.message });
+        .json({ error: "Error al obtener proyectos", details: err.message });
     }
     res.json(rows);
   });
@@ -56,10 +56,10 @@ router.get("/:id", isAuthenticated, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error fetching project", details: err.message });
+        .json({ error: "Error al obtener proyecto", details: err.message });
     }
     if (!row) {
-      return res.status(404).json({ error: "Project not found" });
+      return res.status(404).json({ error: "Proyecto no encontrado" });
     }
     res.json(row);
   });
@@ -74,7 +74,7 @@ router.put("/:id", isAuthenticated, (req, res) => {
   if (!name && !description) {
     return res
       .status(400)
-      .json({ error: "At least one field must be provided for update" });
+      .json({ error: "Se debe proporcionar al menos un campo para actualizar" });
   }
 
   const fields = [];
@@ -100,12 +100,12 @@ router.put("/:id", isAuthenticated, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error updating project", details: err.message });
+        .json({ error: "Error al actualizar proyecto", details: err.message });
     }
     if (this.changes === 0) {
-      return res.status(404).json({ error: "Project not found" });
+      return res.status(404).json({ error: "Proyecto no encontrado" });
     }
-    res.json({ message: "Project updated successfully" });
+    res.json({ message: "Proyecto actualizado con éxito" });
   });
 });
 
@@ -119,12 +119,12 @@ router.delete("/:id", isAuthenticated, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .json({ error: "Error deleting project", details: err.message });
+        .json({ error: "Error al eliminar proyecto", details: err.message });
     }
     if (this.changes === 0) {
-      return res.status(404).json({ error: "Project not found" });
+      return res.status(404).json({ error: "Proyecto no encontrado" });
     }
-    res.json({ message: "Project deleted successfully" });
+    res.json({ message: "Proyecto eliminado con éxito" });
   });
 });
 

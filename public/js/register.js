@@ -18,12 +18,12 @@ form.addEventListener("submit", async (e) => {
   // Validaciones básicas (frontend)
   if (username.length < 3 || password.length < 4) {
     return showError(
-      "Username and password must be at least 3 and 4 characters long."
+      "El usuario y la contraseña deben tener como mínimo 3 y 4 caracteres respectivamente."
     );
   }
 
   if (password !== confirmPassword) {
-    showError("Passwords do not match.");
+    showError("Las contraseñas no coinciden.");
     spinner.classList.add("d-none");
     registerBtn.disabled = false;
     return;
@@ -41,7 +41,7 @@ form.addEventListener("submit", async (e) => {
       throw new Error(result.error || "Error registering user.");
     }
 
-    showSuccess("User registered successfully. Redirecting to login...");
+    showSuccess("Usuario registrado con éxito. Redirigiendo a inicio de sesión...");
     setTimeout(() => {
       window.location.href = "login.html";
     }, 2000);

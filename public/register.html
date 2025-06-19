@@ -1,88 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DevOps Hub - Registro</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body class="bg-light">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-          <div class="card mt-5 shadow">
-            <div class="card-header text-center bg-success text-white">
-              <h3>DevOps Hub</h3>
-              <p class="mb-0">Create Account</p>
-            </div>
-            <div class="card-body">
-              <div id="alertContainer"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevOps Hub - Registro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-light">
 
-              <form id="registerForm" method="POST">
-                <div class="mb-3">
-                  <label for="username" class="form-label">User</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    name="username"
-                    required
-                  />
-                  <div class="form-text">Minimum 3 characters</div>
-                </div>
+  <main class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+      <h2 class="text-center fw-bold mb-3 text-success">Crear cuenta</h2>
+      <p class="text-center text-muted mb-4">Rellena los campos para registrarte</p>
 
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    name="password"
-                    required
-                  />
-                  <div class="form-text">Minimum 4 characters</div>
-                </div>
-                <div class="mb-3">
-                  <label for="confirmPassword" class="form-label"
-                    >Confirm Password</label
-                  >
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  class="btn btn-success w-100"
-                  id="registerBtn"
-                >
-                  <span
-                    id="registerSpinner"
-                    class="spinner-border spinner-border-sm d-none"
-                    role="status"
-                  ></span>
-                  Create Account
-                </button>
-              </form>
-            </div>
-            <div class="card-footer text-center">
-              <p class="mb-0">
-                Already have an account? <a href="login.html">Login here</a>
-              </p>
-            </div>
-          </div>
+      <!-- Contenedor de errores -->
+      <div id="alertContainer"></div>
+
+      <!-- Formulario de registro -->
+      <form id="registerForm" method="POST" novalidate>
+        <div class="mb-3">
+          <label for="username" class="form-label">Nombre de usuario</label>
+          <input type="text" class="form-control" id="username" name="username" required minlength="3" />
+          <div class="form-text">Mínimo 3 caracteres</div>
         </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="password" name="password" required minlength="4" />
+          <div class="form-text">Mínimo 4 caracteres</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 fw-semibold d-flex align-items-center justify-content-center" id="registerBtn">
+          <span id="registerSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+          Registrarse
+        </button>
+      </form>
+
+      <div class="text-center mt-3">
+        <small class="text-muted">
+          ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a>
+        </small>
+      </div>
+      <div class="text-center mt-2">
+        <a href="index.html" class="text-decoration-none text-muted">← Volver al inicio</a>
       </div>
     </div>
+  </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/register.js"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/register.js"></script>
+</body>
 </html>
